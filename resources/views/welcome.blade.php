@@ -10,7 +10,8 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-        <style>
+    <style>
+
     </style>
 </head>
 
@@ -33,7 +34,6 @@
                         <a class="nav-link disabled" href="#">Disabled</a>
                     </li>
                 </ul>
-              
             </div>
         </nav>
         <div class="container-fulid" id="display-area">
@@ -49,12 +49,12 @@
                             </form>
                         </div>
                     </div>
-        
                     <div id="side-panel">
                         <div class="panel panel-info">
                             <div class="panel-body">
                                 <div rolce="tabpanel" class="tab-pane" id="vtab2">
-                                    <br><br>
+                                    <br>
+                                    <br>
                                     <h2>店名</h2>
                                     <p> Mauris imperdiet dignissim ante, in efficitur mauris elementum sed. Cras vulputate malesuada magna.</p>
                                     <h2>地址</h2>
@@ -63,15 +63,12 @@
                             </div>
                         </div>
                     </div>
-              </div>
+                </div>
                 <div class="col-8">
                     <div id="map"></div>
                 </div>
-                
-  
                 <!-- Modal -->
             </div>
-            
         </div>
         <!-- Modal -->
     </div>
@@ -129,25 +126,22 @@
     var searchbar_height = $('#search-bar').height()
     $('#side-panel').css('overflow-y', 'auto').css('height', 'calc(100vh - ' + navheight + 'px - ' + searchbar_height + 'px)')
     $('#map').css('height', 'calc(100vh - ' + navheight + 'px)')
-    
     </script>
     <script>
-      function initMap() {
-        var uluru = {lat: 24.178820, lng: 120.646705};
-        var map = new 
-          google.maps.Map(document.getElementById('map'), {
-            zoom:20,
+    function initMap() {
+        var uluru = { lat: 24.178820, lng: 120.646705 };
+        var map = new
+        google.maps.Map(document.getElementById('map'), {
+            zoom: 20,
             center: uluru
-          });
-         var marker = new google.maps.Marker({
-          position: uluru,
-          map: map
         });
-      }
+        var marker = new google.maps.Marker({
+            position: uluru,
+            map: map
+        });
+    }
     </script>
-    
-    
-        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCVzeYipfPzJuiHOUEu1CNUy9cYuaLBHaY&callback=initMap"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCVzeYipfPzJuiHOUEu1CNUy9cYuaLBHaY&callback=initMap"></script>
 </body>
 
 </html>
