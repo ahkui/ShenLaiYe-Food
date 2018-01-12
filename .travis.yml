@@ -12,7 +12,7 @@ services:
   - mongodb
 
 before_script:
-  - mongo mydb_test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
+  - mongo mydb_test --eval 'db.createUser({user:"food",pwd:"food",roles:["dbAdminAnyDatabase"]});'
   - pecl channel-update pecl.php.net
   - composer self-update
   - pecl install mongodb
@@ -28,3 +28,5 @@ script:
 
 after_success:
     - bash <(curl -s https://codecov.io/bash) -t 7f0d0fbd-91c7-4d38-8fd3-080c29f29d7a
+
+
