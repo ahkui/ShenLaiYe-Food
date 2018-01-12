@@ -178,6 +178,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         Jenssegers\Mongodb\Auth\PasswordResetServiceProvider::class,
+        Jenssegers\Mongodb\MongodbQueueServiceProvider::class,
 
     ],
 

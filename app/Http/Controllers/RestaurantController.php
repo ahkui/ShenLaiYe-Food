@@ -13,7 +13,12 @@ class RestaurantController extends Controller
     protected $googlePlaces;
 
     public function __construct(){
+        $this->middleware('auth');
         $this->googlePlaces = new PlacesApi(env('GOOGLE_PLACE_API_KEY'));
+    }
+
+    public function home(){
+        return view('home');
     }
 
     public function search(){
@@ -50,7 +55,7 @@ class RestaurantController extends Controller
         $search = SearchResult::find(request()->id);
         $type = 'food';
         $location = "{$search->location['coordinates'][1]}, {$search->location['coordinates'][0]}";
-        $radius = 1000;
+        $radius = request()->radius ? request()->radius : 1000 ;
         $response = $this->googlePlaces->nearbySearch($location,$radius,[
             'language'=>'zh-TW',
             'type'=>$type,
@@ -80,7 +85,7 @@ class RestaurantController extends Controller
             if (isset($response['next_page_token']))
                 FetchNextPage::dispatch($location,$radius,$type,$response['next_page_token'])->delay(now()->addSecond(5));
         }
-        $db = $this->geometry_search($search->location);
+        $db = $this->geometry_search($search->location,$radius);
 
         $union = $data->union($db);
         $data = $union->unique('place_id');

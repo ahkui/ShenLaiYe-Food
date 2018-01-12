@@ -41,7 +41,7 @@ class FetchNextPage implements ShouldQueue
     public function handle()
     {
         dump("{$this->location} start queue!");
-        $googlePlaces = new PlacesApi($this->key);
+        $googlePlaces = new PlacesApi(env('GOOGLE_PLACE_API_KEY'));
         $response = $googlePlaces->nearbySearch($this->location,$this->radius,[
             'language'=>'zh-TW',
             'type'=>$this->type,
@@ -68,6 +68,8 @@ class FetchNextPage implements ShouldQueue
             else{
                 dump("{$this->location} queue done");
             }
+        }else{
+            dump($response);
         }
     }
 }
