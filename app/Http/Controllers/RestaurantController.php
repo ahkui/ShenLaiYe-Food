@@ -10,30 +10,10 @@ use App\Jobs\FetchNextPage;
 
 class RestaurantController extends Controller
 {
+    protected $googlePlaces;
+
     public function __construct(){
-
-        $this->key = 'AIzaSyCDADeOH-8PmS0Nu5fqbbKsR3EZT1FAtSw';
-        // $this->key = 'AIzaSyCU8D8CL7EkRjDnfhFBJRHoNTpM0pOqE6Q';
-
-        $this->googlePlaces = new PlacesApi($this->key);
-    }
-
-    public function geometry_search($lng,$lat,$distance = 1000){
-        $data = Restaurant::where('location', 'near', [
-            '$geometry' => [
-                'type' => 'Point',
-                'coordinates' => [
-                    (float)$lng,
-                    (float)$lat,
-                ],
-            ],
-            '$maxDistance' => (integer)$distance,
-        ])->get();
-        return $data;
-    }
-
-    public function geometry_search2($lng,$lat,$distance = 1000){
-        dd($this->geometry_search($lng,$lat,$distance));
+        $this->googlePlaces = new PlacesApi(env('GOOGLE_PLACE_API_KEY'));
     }
 
     public function search(){
@@ -45,10 +25,6 @@ class RestaurantController extends Controller
         });
         $data = SearchResult::where('keyword','like',"%{$keyword}%")->get();
         return $data;
-    }
-
-    public function search2(){
-        dump($this->search());
     }
 
     public function convert_place_id($place_id,$name,$keyword = null){
@@ -77,7 +53,6 @@ class RestaurantController extends Controller
         $radius = 1000;
         $response = $this->googlePlaces->nearbySearch($location,$radius,[
             'language'=>'zh-TW',
-            // 'language'=>'en',
             'type'=>$type,
         ]);
         $data = collect();
@@ -105,6 +80,18 @@ class RestaurantController extends Controller
             if (isset($response['next_page_token']))
                 FetchNextPage::dispatch($location,$radius,$type,$response['next_page_token'])->delay(now()->addSecond(5));
         }
+        $db = $this->geometry_search($search->location);
+
+        $union = $data->union($db);
+        $data = $union->unique('place_id');
+        return $data->values();
+    }
+
+    public function geometry_search($location,$distance = 1000){
+        $data = Restaurant::where('location', 'near', [
+            '$geometry' => $location,
+            '$maxDistance' => (integer)$distance,
+        ])->get();
         return $data;
     }
 

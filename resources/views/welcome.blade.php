@@ -47,14 +47,14 @@
                     </div>
                     <div id="side-panel">
                         <div class="list-group">
-                            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
+                            <div class="list-group-item flex-column align-items-start">
                                 <div class="d-flex w-100 justify-content-between">
                                     <h5 class="mb-1">List group item heading</h5>
                                     <small>3 days ago</small>
                                 </div>
                                 <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-                                <small>Donec id elit non mi porta.</small>
-                            </a>
+                                <a class="btn btn-primary nav-link" href="#" data-toggle="modal" data-target="#exampleModal">評分</a>
+                            </div>
                             <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
                                 <div class="d-flex w-100 justify-content-between">
                                     <h5 class="mb-1">List group item heading</h5>
@@ -150,6 +150,7 @@
                     var id = item['_id']
                     var name = item['name']
                     $('#side-panel .list-group').append("<a class=\"btn btn-light\" onclick=\"select_address('" + id + "')\">" + name + "</a>");
+                    $('#side-panel .name').append("<a>12345</a>");
 
                 }
             })
@@ -162,11 +163,10 @@
     function select_address(id) {
         axios.post('search/near', { id: id })
             .then(function(response) {
-                $('#side-panel').html("");
-                console.log(response.data)
+                $('#side-panel .list-group').html("");
                 for (var item in response.data) {
                     item = response.data[item]
-                    $('#side-panel').append("<p>" + item['description'] + "</p>");
+                    $('#side-panel .list-group').append("<p>" + item['name'] + "</p>");
                 }
             })
             .catch(function(error) {

@@ -25,7 +25,7 @@ class FetchNextPage implements ShouldQueue
      */
     public function __construct($location,$radius,$type,$next_token = null)
     {
-        $this->key = 'AIzaSyCDADeOH-8PmS0Nu5fqbbKsR3EZT1FAtSw';
+        $this->key = env('GOOGLE_PLACE_API_KEY');
         // $this->key = 'AIzaSyDWK5BodNliXvHgUmlxeMFMv8jUFvKTMrY';
         $this->location = $location;
         $this->radius = $radius;
