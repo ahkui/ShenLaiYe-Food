@@ -25,16 +25,15 @@
                         <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="#" data-toggle="modal" data-target="#exampleModal">評分</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="#">Link</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link disabled" href="#">Disabled</a>
                     </li>
                 </ul>
-                <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                </form>
             </div>
         </nav>
         <div class="container-fulid" id="display-area">
@@ -45,6 +44,7 @@
                             <input type="search" placeholder="Search" aria-label="Search" class="w-75 form-control" name="name">
                             <button type="submit" class="w-25 btn btn-outline-success">Search</button>
                         </form>
+                        
                     </div>
                     <div id="side-panel">
                         <div class="panel panel-info">
@@ -58,17 +58,14 @@
                     </div>
                 </div>
                 <div class="col-8">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">評分</button>
+                    <div id="map"></div>
+                    
+                     
                 </div>
-                <!-- Modal -->
             </div>
         </div>
-        
-         <div class="col-8">
-                    <div id="map"></div>
-                </div>
-        <!-- Modal -->
     </div>
+    <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -114,11 +111,8 @@
             </div>
         </div>
     </div>
-    
-    
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
-    
     <script>
     var navheight = Math.ceil($('nav').height() + $('nav').css('padding-top').replace('px', '') * 2)
     $('#search-bar').css('width', 'calc(100% - 16px)')
@@ -136,9 +130,9 @@
             .then(function(response) {
                 $('#side-panel').html("");
                 console.log(response.data)
-                for(var item in response.data){
+                for (var item in response.data) {
                     item = response.data[item]
-                    $('#side-panel').append("<p>"+item['description']+"</p>");
+                    $('#side-panel').append("<p>" + item['description'] + "</p>");
                 }
             })
             .catch(function(error) {
@@ -146,22 +140,20 @@
             });
         return false;
     }
-    </script>
-    
-     <script>
-      function initMap() {
-        var uluru = {lat: 24.178820, lng: 120.646705};
-        var map = new 
-          google.maps.Map(document.getElementById('map'), {
-            zoom:20,
+    function initMap() {
+        var uluru = { lat: 24.178820, lng: 120.646705 };
+        var map = new
+        google.maps.Map(document.getElementById('map'), {
+            zoom: 20,
             center: uluru
-          });
-         var marker = new google.maps.Marker({
-          position: uluru,
-          map: map
         });
-      }
+        var marker = new google.maps.Marker({
+            position: uluru,
+            map: map
+        });
+    }
     </script>
+        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCVzeYipfPzJuiHOUEu1CNUy9cYuaLBHaY&callback=initMap"></script>
 </body>
 
 </html>

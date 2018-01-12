@@ -27,4 +27,4 @@ script:
 
 
 after_success:
-    - bash <(curl -s https://codecov.io/bash) -t b4a0bf37-ac3c-4b4e-8649-292ca30cf70f
+    - bash <(curl -s https://codecov.io/bash) -t 7f0d0fbd-91c7-4d38-8fd3-080c29f29d7a

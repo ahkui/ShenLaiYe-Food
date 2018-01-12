@@ -13,7 +13,7 @@ class RestaurantController extends Controller
 
         $this->key = 'AIzaSyCDADeOH-8PmS0Nu5fqbbKsR3EZT1FAtSw';
         // $this->key = 'AIzaSyCU8D8CL7EkRjDnfhFBJRHoNTpM0pOqE6Q';
-        
+
         $this->googlePlaces = new PlacesApi($this->key);
     }
 
@@ -22,6 +22,27 @@ class RestaurantController extends Controller
         return $response['predictions'];
     }
 
+
+    public function search2(){
+        dump($this->search());
+    }
+
+    public function geometry_search($lng,$lat,$distance = 1000){
+        $data = Restaurant::where('location', 'near', [
+            '$geometry' => [
+                'type' => 'Point',
+                'coordinates' => [
+                    (float)$lng,
+                    (float)$lat,
+                ],
+            ],
+            '$maxDistance' => (integer)$distance,
+        ])->get();
+        return $data;
+    }
+    public function geometry_search2($lng,$lat,$distance = 1000){
+        dd($this->geometry_search($lng,$lat,$distance));
+    }
     // public function place_id_to_
     /**
      * 測試頁面

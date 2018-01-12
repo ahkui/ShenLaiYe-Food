@@ -32,7 +32,7 @@ Route::get('search', function () {
 });
 
 Route::post('search', 'RestaurantController@search');
-Route::get('get/search/{name}', 'RestaurantController@search');
+Route::get('get/search/{name}', 'RestaurantController@search2');
 
 Auth::routes();
 
@@ -42,18 +42,5 @@ Auth::routes();
 Route::get('test', 'RestaurantController@test');
 
 use App\Restaurant;
-Route::get('geometry/{lng}/{lat}/{distance?}',function($lng,$lat,$distance = 1000){
-    dump(Restaurant::all());
-    dump(
-        Restaurant::where('location', 'near', [
-            '$geometry' => [
-                'type' => 'Point',
-                'coordinates' => [
-                    (float)$lng,
-                    (float)$lat,
-                ],
-            ],
-            '$maxDistance' => (integer)$distance,
-        ])->get()
-    );
-});
+Route::get('geometry/{lng}/{lat}/{distance?}','RestaurantController@geometry_search');
+Route::get('get/geometry/{lng}/{lat}/{distance?}','RestaurantController@geometry_search2');
