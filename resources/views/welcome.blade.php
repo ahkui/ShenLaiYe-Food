@@ -10,9 +10,6 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <style>
-
-    </style>
 </head>
 
 <body style="height:100vh">
@@ -28,6 +25,9 @@
                         <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="#" data-toggle="modal" data-target="#exampleModal">評分</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="#">Link</a>
                     </li>
                     <li class="nav-item">
@@ -38,40 +38,49 @@
         </nav>
         <div class="container-fulid" id="display-area">
             <div class="row no-gutters">
-                <div class="col-4
-                
-                ">
-                    <div id="search-bar" style="position: absolute;background-color: #f5f8fa">
-                        <div>
-                            <form class="form-inline">
-                                <input type="search" placeholder="Search" aria-label="Search" class="form-control mr-sm-2">
-                                <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Search</button>
-                            </form>
-                        </div>
+                <div class="col-4">
+                    <div id="search-bar" style="z-index:999;position: absolute;background-color: #f5f8fa">
+                        <form class="form-inline w-100" onsubmit="return search_submit(this)">
+                            <input type="search" placeholder="Search" aria-label="Search" class="w-75 form-control" name="name">
+                            <button type="submit" class="w-25 btn btn-outline-success">Search</button>
+                        </form>
                     </div>
                     <div id="side-panel">
-                        <div class="panel panel-info">
-                            <div class="panel-body">
-                                <div rolce="tabpanel" class="tab-pane" id="vtab2">
-                                    <br>
-                                    <br>
-                                    <h2>店名</h2>
-                                    <p> Mauris imperdiet dignissim ante, in efficitur mauris elementum sed. Cras vulputate malesuada magna.</p>
-                                    <h2>地址</h2>
-                                    <p> Mauris imperdiet dignissim ante, in efficitur mauris elementum sed. Cras vulputate malesuada magna.</p>
+                        <div class="list-group">
+                            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">List group item heading</h5>
+                                    <small>3 days ago</small>
                                 </div>
-                            </div>
+                                <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                                <small>Donec id elit non mi porta.</small>
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">List group item heading</h5>
+                                    <small class="text-muted">3 days ago</small>
+                                </div>
+                                <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                                <small class="text-muted">Donec id elit non mi porta.</small>
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">List group item heading</h5>
+                                    <small class="text-muted">3 days ago</small>
+                                </div>
+                                <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                                <small class="text-muted">Donec id elit non mi porta.</small>
+                            </a>
                         </div>
                     </div>
                 </div>
                 <div class="col-8">
                     <div id="map"></div>
                 </div>
-                <!-- Modal -->
             </div>
         </div>
-        <!-- Modal -->
     </div>
+    <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -121,13 +130,52 @@
     <script src="{{ asset('js/app.js') }}"></script>
     <script>
     var navheight = Math.ceil($('nav').height() + $('nav').css('padding-top').replace('px', '') * 2)
-    console.log(navheight)
+    $('#search-bar').css('width', 'calc(100% - 16px)')
+    $('#search-bar').css('padding', '5px')
+    var searchbar_height = $('#search-bar').height() + $('#search-bar').css('padding').replace('px', '') * 2
     $('body').css('padding-top', navheight + 'px')
-    var searchbar_height = $('#search-bar').height()
-    $('#side-panel').css('overflow-y', 'auto').css('height', 'calc(100vh - ' + navheight + 'px - ' + searchbar_height + 'px)')
+    $('#side-panel').css('padding-top', searchbar_height + 'px').css('height', 'calc(100vh - ' + navheight + 'px)')
     $('#map').css('height', 'calc(100vh - ' + navheight + 'px)')
-    </script>
-    <script>
+    $('#side-panel').css('overflow-y', 'auto')
+
+    function search_submit(el) {
+        event.preventDefault();
+        var data = $(el).serialize()
+        axios.post('search', data)
+            .then(function(response) {
+                $('#side-panel .list-group').html("");
+                console.log(response.data)
+                for (var item in response.data) {
+                    item = response.data[item]
+                    var id = item['_id']
+                    var name = item['name']
+                    $('#side-panel .list-group').append("<a class=\"btn btn-light\" onclick=\"select_address('" + id + "')\">" + name + "</a>");
+
+                }
+            })
+            .catch(function(error) {
+                console.log(error);
+            });
+        return false;
+    }
+
+    function select_address(id) {
+        axios.post('search/near', { id: id })
+            .then(function(response) {
+                $('#side-panel').html("");
+                console.log(response.data)
+                for (var item in response.data) {
+                    item = response.data[item]
+                    $('#side-panel').append("<p>" + item['description'] + "</p>");
+                }
+            })
+            .catch(function(error) {
+                console.log(error);
+            });
+        return false;
+    }
+
+
     function initMap() {
         var uluru = { lat: 24.178820, lng: 120.646705 };
         var map = new

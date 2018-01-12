@@ -13,6 +13,7 @@
 
 Route::get('/', function () {
     return view('welcome');
+    return redirect('home');
 });
 
 Route::get('home', function () {
@@ -23,19 +24,16 @@ Route::get('review', function () {
     return view('review');
 });
 
-Route::post('review', function () {
-    return [request()->input(),request()->input()];
-});
-
 Route::get('search', function () {
     return view('search');
 });
 
-Route::get('convert_place_id', 'RestaurantController@convert_place_id');
 Route::post('convert_place_id', 'RestaurantControlaler@convert_place_id');
-
 Route::post('search', 'RestaurantController@search');
-Route::get('get/search/{name}', 'RestaurantController@search2');
+Route::post('search/near', 'RestaurantController@search_near');
+Route::post('review', function () {
+    return [request()->input(),request()->input()];
+});
 
 Auth::routes();
 

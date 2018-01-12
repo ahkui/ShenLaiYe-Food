@@ -22,7 +22,7 @@
             <div class="collapse navbar-collapse" id="navBar">
                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                     <li class="nav-item active">
-                       <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#" data-toggle="modal" data-target="#exampleModal">評分</a>
@@ -39,28 +39,43 @@
         <div class="container-fulid" id="display-area">
             <div class="row no-gutters">
                 <div class="col-4">
-                    <div id="search-bar" style="position: absolute;background-color: #f5f8fa">
+                    <div id="search-bar" style="z-index:999;position: absolute;background-color: #f5f8fa">
                         <form class="form-inline w-100" onsubmit="return search_submit(this)">
                             <input type="search" placeholder="Search" aria-label="Search" class="w-75 form-control" name="name">
                             <button type="submit" class="w-25 btn btn-outline-success">Search</button>
                         </form>
-                        
                     </div>
                     <div id="side-panel">
-                        <div class="panel panel-info">
-                            <div class="panel-body">
-                                <div rolce="tabpanel" class="tab-pane" id="vtab2">
-                                    <h3>Tab 2</h3>
-                                    <p> Mauris imperdiet dignissim ante, in efficitur mauris elementum sed. Cras vulputate malesuada magna. Morbi tincidunt eros a dui cursus, vitae dignissim nulla scelerisque. Duis pharetra scelerisque mi vel luctus. Cras eu purus efficitur, blandit nisi id, fringilla nulla. Mauris imperdiet dignissim ante, in efficitur mauris elementum sed. Cras vulputate malesuada magna. Morbi tincidunt eros a dui cursus, vitae dignissim nulla scelerisque. Duis pharetra scelerisque mi vel luctus. Cras eu purus efficitur, blandit nisi id, fringilla nulla. Mauris imperdiet dignissim ante, in efficitur mauris elementum sed. Cras vulputate malesuada magna. Morbi tincidunt eros a dui cursus, vitae dignissim nulla scelerisque. Duis pharetra scelerisque mi vel luctus. Cras eu purus efficitur, blandit nisi id, fringilla nulla. Mauris imperdiet dignissim ante, in efficitur mauris elementum sed. Cras vulputate malesuada magna. Morbi tincidunt eros a dui cursus, vitae dignissim nulla scelerisque. Duis pharetra scelerisque mi vel luctus. Cras eu purus efficitur, blandit nisi id, fringilla nulla. Mauris imperdiet dignissim ante, in efficitur mauris elementum sed. Cras vulputate malesuada magna. Morbi tincidunt eros a dui cursus, vitae dignissim nulla scelerisque. Duis pharetra scelerisque mi vel luctus. Cras eu purus efficitur, blandit nisi id, fringilla nulla. Mauris imperdiet dignissim ante, in efficitur mauris elementum sed. Cras vulputate malesuada magna. Morbi tincidunt eros a dui cursus, vitae dignissim nulla scelerisque. Duis pharetra scelerisque mi vel luctus. Cras eu purus efficitur, blandit nisi id, fringilla nulla. Mauris imperdiet dignissim ante, in efficitur mauris elementum sed. Cras vulputate malesuada magna. Morbi tincidunt eros a dui cursus, vitae dignissim nulla scelerisque. Duis pharetra scelerisque mi vel luctus. Cras eu purus efficitur, blandit nisi id, fringilla nulla. Mauris imperdiet dignissim ante, in efficitur mauris elementum sed. Cras vulputate malesuada magna. Morbi tincidunt eros a dui cursus, vitae dignissim nulla scelerisque. Duis pharetra scelerisque mi vel luctus. Cras eu purus efficitur, blandit nisi id, fringilla nulla. Mauris imperdiet dignissim ante, in efficitur mauris elementum sed. Cras vulputate malesuada magna. Morbi tincidunt eros a dui cursus, vitae dignissim nulla scelerisque. Duis pharetra scelerisque mi vel luctus. Cras eu purus efficitur, blandit nisi id, fringilla nulla. Mauris imperdiet dignissim ante, in efficitur mauris elementum sed. Cras vulputate malesuada magna. Morbi tincidunt eros a dui cursus, vitae dignissim nulla scelerisque. Duis pharetra scelerisque mi vel luctus. Cras eu purus efficitur, blandit nisi id, fringilla nulla. Mauris imperdiet dignissim ante, in efficitur mauris elementum sed. Cras vulputate malesuada magna. Morbi tincidunt eros a dui cursus, vitae dignissim nulla scelerisque. Duis pharetra scelerisque mi vel luctus. Cras eu purus efficitur, blandit nisi id, fringilla nulla. Mauris imperdiet dignissim ante, in efficitur mauris elementum sed. Cras vulputate malesuada magna. Morbi tincidunt eros a dui cursus, vitae dignissim nulla scelerisque. Duis pharetra scelerisque mi vel luctus. Cras eu purus efficitur, blandit nisi id, fringilla nulla.</p>
+                        <div class="list-group">
+                            <div class="list-group-item flex-column align-items-start">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">List group item heading</h5>
+                                    <small>3 days ago</small>
                                 </div>
+                                <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                                <a class="btn btn-primary nav-link" href="#" data-toggle="modal" data-target="#exampleModal">評分</a>
                             </div>
+                            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">List group item heading</h5>
+                                    <small class="text-muted">3 days ago</small>
+                                </div>
+                                <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                                <small class="text-muted">Donec id elit non mi porta.</small>
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">List group item heading</h5>
+                                    <small class="text-muted">3 days ago</small>
+                                </div>
+                                <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                                <small class="text-muted">Donec id elit non mi porta.</small>
+                            </a>
                         </div>
                     </div>
                 </div>
                 <div class="col-8">
                     <div id="map"></div>
-                    
-                     
                 </div>
             </div>
         </div>
@@ -128,11 +143,14 @@
         var data = $(el).serialize()
         axios.post('search', data)
             .then(function(response) {
-                $('#side-panel').html("");
+                $('#side-panel .list-group').html("");
                 console.log(response.data)
                 for (var item in response.data) {
                     item = response.data[item]
-                    $('#side-panel').append("<p>" + item['description'] + "</p>");
+                    var id = item['_id']
+                    var name = item['name']
+                    $('#side-panel .list-group').append("<a class=\"btn btn-light\" onclick=\"select_address('" + id + "')\">" + name + "</a>");
+
                 }
             })
             .catch(function(error) {
@@ -141,14 +159,13 @@
         return false;
     }
 
-    function select_address(place_id) {
-        axios.post('search', {place_id:place_id})
+    function select_address(id) {
+        axios.post('search/near', { id: id })
             .then(function(response) {
-                $('#side-panel').html("");
-                console.log(response.data)
+                $('#side-panel .list-group').html("");
                 for (var item in response.data) {
                     item = response.data[item]
-                    $('#side-panel').append("<p>" + item['description'] + "</p>");
+                    $('#side-panel .list-group').append("<p>" + item['name'] + "</p>");
                 }
             })
             .catch(function(error) {
@@ -159,8 +176,7 @@
 
 
     function initMap() {
-        var uluru = { l
-        at: 24.178820, lng: 120.646705 };
+        var uluru = { lat: 24.178820, lng: 120.646705 };
         var map = new
         google.maps.Map(document.getElementById('map'), {
             zoom: 20,
@@ -172,7 +188,7 @@
         });
     }
     </script>
-        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCVzeYipfPzJuiHOUEu1CNUy9cYuaLBHaY&callback=initMap"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCVzeYipfPzJuiHOUEu1CNUy9cYuaLBHaY&callback=initMap"></script>
 </body>
 
 </html>

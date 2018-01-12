@@ -13,9 +13,9 @@ class CreateSearchResultsTable extends Migration
      */
     public function up()
     {
-        Schema::create('search_results', function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
+        Schema::create('search_results', function ($table) {
+            $table->geospatial('location', '2dsphere');
+            $table->unique('place_id');
         });
     }
 
