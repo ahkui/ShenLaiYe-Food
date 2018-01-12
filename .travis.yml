@@ -12,7 +12,7 @@ services:
   - mongodb
 
 before_script:
-  - mongo mydb_test --eval 'db.createUser({user:"food",pwd:"food",roles:["dbAdminAnyDatabase"]});'
+  - mongo food --eval 'db.createUser({user:"food",pwd:"food",roles:["dbAdminAnyDatabase"]});'
   - pecl channel-update pecl.php.net
   - composer self-update
   - pecl install mongodb
