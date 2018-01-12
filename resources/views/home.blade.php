@@ -22,7 +22,7 @@
             <div class="collapse navbar-collapse" id="navBar">
                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                     <li class="nav-item active">
-                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                       <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#" data-toggle="modal" data-target="#exampleModal">評分</a>
@@ -140,8 +140,27 @@
             });
         return false;
     }
+
+    function select_address(place_id) {
+        axios.post('search', {place_id:place_id})
+            .then(function(response) {
+                $('#side-panel').html("");
+                console.log(response.data)
+                for (var item in response.data) {
+                    item = response.data[item]
+                    $('#side-panel').append("<p>" + item['description'] + "</p>");
+                }
+            })
+            .catch(function(error) {
+                console.log(error);
+            });
+        return false;
+    }
+
+
     function initMap() {
-        var uluru = { lat: 24.178820, lng: 120.646705 };
+        var uluru = { l
+        at: 24.178820, lng: 120.646705 };
         var map = new
         google.maps.Map(document.getElementById('map'), {
             zoom: 20,

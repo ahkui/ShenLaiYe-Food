@@ -40,8 +40,13 @@ class RestaurantController extends Controller
         ])->get();
         return $data;
     }
+
     public function geometry_search2($lng,$lat,$distance = 1000){
         dd($this->geometry_search($lng,$lat,$distance));
+    }
+
+    public function convert_place_id(){
+        return "qweqweqwe";
     }
     // public function place_id_to_
     /**
@@ -57,23 +62,6 @@ class RestaurantController extends Controller
             'language'=>'en',
             'type'=>$type,
         ]);
-        // $token = isset($response['next_page_token']) ?
-        //             $response['next_page_token']: 
-        //             0;
-        // do {
-        //     if ($token) {
-        //         do {
-        //             $temp = $googlePlaces->nearbySearch($location,$radius,['type'=>$type,'pagetoken'=>$token]);
-        //         } while($temp['status'] == 'INVALID_REQUEST' );
-        //         if ($temp['status'] == 'OK') {
-        //             $temp['results'] = $temp['results']->merge($response['results']);
-        //             $response = $temp;
-        //             $token = isset($response['next_page_token']) ?$response['next_page_token']: null;
-        //         }
-        //     }
-        // } while($token);
-
-
         $data = collect();
         if ($response['status']=='OK')
         foreach ($response['results'] as $value) 

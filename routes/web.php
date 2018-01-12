@@ -31,6 +31,9 @@ Route::get('search', function () {
     return view('search');
 });
 
+Route::get('convert_place_id', 'RestaurantController@convert_place_id');
+Route::post('convert_place_id', 'RestaurantControlaler@convert_place_id');
+
 Route::post('search', 'RestaurantController@search');
 Route::get('get/search/{name}', 'RestaurantController@search2');
 
