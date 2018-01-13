@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
 
 class CreateRestaurantsTable extends Migration
 {
@@ -13,12 +12,10 @@ class CreateRestaurantsTable extends Migration
      */
     public function up()
     {
-
         Schema::create('restaurants', function ($table) {
             $table->geospatial('location', '2dsphere');
             $table->unique('place_id');
         });
-
     }
 
     /**

@@ -38,12 +38,14 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-
     /**
      * Increment the login attempts for the user.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return void
      */
-    protected function incrementLoginAttempts(Request $request){}
+    protected function incrementLoginAttempts(Request $request)
+    {
+    }
 }
