@@ -38,7 +38,7 @@ class FetchLocations extends Command
      */
     public function handle()
     {
-        FetchNextPage::dispatch("24.178829,120.646438",9999,'food')->delay(now()->addSecond(5));;
-        FetchNextPage::dispatch("25.047884, 121.520166",9999,'food')->delay(now()->addSecond(5));;
+        FetchNextPage::dispatch('24.178829,120.646438', 9999, 'food')->delay(now()->addSecond(5));
+        FetchNextPage::dispatch('25.047884, 121.520166', 9999, 'food')->delay(now()->addSecond(5));
     }
 }

@@ -2,13 +2,13 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Auth\Authenticatable as AuthenticableTrait;
+use Illuminate\Contracts\Auth\Authenticatable;
 // use Jenssegers\Mongodb\Auth\User as Authenticatable;
-use Jenssegers\Mongodb\Eloquent\Model; 
-use Illuminate\Contracts\Auth\Authenticatable; 
+use Illuminate\Notifications\Notifiable;
+use Jenssegers\Mongodb\Eloquent\Model;
 
-class User extends Model implements Authenticatable 
+class User extends Model implements Authenticatable
 {
     use Notifiable, AuthenticableTrait;
     protected $collection = 'users';
@@ -40,5 +40,4 @@ class User extends Model implements Authenticatable
     {
         return $this->embedsMany('RestaurantRate');
     }
-
 }

@@ -14,8 +14,8 @@ class Restaurant extends Model
         'location',
     ];
     protected $casts = [
-        'name' => 'string',
-        'rating' => 'integer',
+        'name'     => 'string',
+        'rating'   => 'integer',
         'vicinity' => 'string',
     ];
 

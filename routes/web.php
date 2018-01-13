@@ -15,7 +15,6 @@ Route::get('home', function () {
     return view('welcome');
 });
 
-
 Route::get('review', function () {
     return view('review');
 });
@@ -29,7 +28,7 @@ Route::post('search', 'RestaurantController@search');
 Route::post('search/gps', 'RestaurantController@searchByGps');
 Route::post('search/near', 'RestaurantController@search_near');
 Route::post('review', function () {
-    return [request()->input(),request()->input()];
+    return [request()->input(), request()->input()];
 });
 
 Auth::routes();
