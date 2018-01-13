@@ -24,21 +24,6 @@
         </div>
         <div class="col-8">
             <div class="content">
-                {{-- <div class="custom-model">
-                    <div class="container-fulid">
-                        <div class="row no-gutters">
-                            <div class="col">
-                                <p>asd</p>
-                            </div>
-                            <div class="col" style="background-color: blue;">
-                                <p><a class="btn btn-primary nav-link" href="#" data-toggle="modal" data-target="#exampleModal">評分</a></p>
-                            </div>
-                            <div class="col">
-                                <p>asd</p>
-                            </div>
-                        </div>
-                    </div>
-                </div> --}}
                 <div id="map"></div>
             </div>
         </div>
