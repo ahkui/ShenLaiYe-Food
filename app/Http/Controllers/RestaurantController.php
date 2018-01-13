@@ -25,10 +25,19 @@ class RestaurantController extends Controller
         $keyword = request()->name;
         $response = $this->googlePlaces->placeAutocomplete($keyword);
         $data = collect($response['predictions']);
-        $data = $data->map(function($item) use ($keyword){
-            return $this->convert_place_id($item['place_id'],$item['description'],$keyword);
-        });
-        $data = SearchResult::where('keyword','like',"%{$keyword}%")->get();
+        if($data->count() > 0)
+            if(request()->is_shop == "true")
+                return $this->convert_place_id($data[0]['place_id'],$data[0]['terms'][0]['value'],$keyword);
+            else
+            {
+                $data = $data->map(function($item) use ($keyword){
+                    return $this->convert_place_id($item['place_id'],$item['terms'][0]['value'],$keyword);
+                });
+                $db = $data;
+                $data = SearchResult::where('keyword','like',"%{$keyword}%")->get();
+                $union = $data->union($db);
+                $data = $union->unique('place_id')->values();
+            }
         return $data;
     }
 
@@ -51,8 +60,9 @@ class RestaurantController extends Controller
         return $data;
     }
 
-    public function search_near(){
-        $search = SearchResult::find(request()->id);
+    public function search_near($temp = null){
+
+        $search = $temp ? $temp : SearchResult::find(request()->id);
         $type = 'food';
         $location = "{$search->location['coordinates'][1]}, {$search->location['coordinates'][0]}";
         $radius = request()->radius ? request()->radius : 1000 ;
@@ -89,7 +99,20 @@ class RestaurantController extends Controller
 
         $union = $data->union($db);
         $data = $union->unique('place_id');
-        return $data->values();
+        $data = ['data'=>$data->values(),'center'=>$search->location['coordinates']];
+        return $data;
+    }
+
+    public function searchByGps(){
+        $data = new SearchResult();
+        $data->location = [
+            "type" => "Point",
+            "coordinates" => [ 
+                (float)request()->longitude, 
+                (float)request()->latitude,
+            ],
+        ];
+        return $this->search_near($data);
     }
 
     public function geometry_search($location,$distance = 1000){

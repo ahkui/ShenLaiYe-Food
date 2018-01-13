@@ -18,4 +18,14 @@ class Restaurant extends Model
         'rating' => 'integer',
         'vicinity' => 'string',
     ];
+
+    public function restaurant_comments()
+    {
+        return $this->embedsMany('RestaurantComment');
+    }
+
+    public function restaurant_rates()
+    {
+        return $this->embedsMany('RestaurantRate');
+    }
 }

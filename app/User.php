@@ -31,8 +31,14 @@ class User extends Model implements Authenticatable
         'password', 'remember_token',
     ];
 
-    public function books()
+    public function restaurant_comments()
     {
-        return $this->embedsMany('Book');
+        return $this->embedsMany('RestaurantComment');
     }
+
+    public function restaurant_rates()
+    {
+        return $this->embedsMany('RestaurantRate');
+    }
+
 }

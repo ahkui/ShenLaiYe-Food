@@ -26,6 +26,7 @@ Route::get('search', function () {
 
 Route::get('/', 'RestaurantController@home')->name('home');
 Route::post('search', 'RestaurantController@search');
+Route::post('search/gps', 'RestaurantController@searchByGps');
 Route::post('search/near', 'RestaurantController@search_near');
 Route::post('review', function () {
     return [request()->input(),request()->input()];
