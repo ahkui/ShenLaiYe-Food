@@ -10,21 +10,6 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <style>
-    .custom-model {
-        position: absolute;
-        /*top: -200%;*/
-        /*left: -200%;*/
-        top: 0;
-        left: 0;
-        width: 100%;
-        /*height: 100%;*/
-        background-color: #f5f8fa;
-        z-index: 999;
-        /*opacity: 0;*/
-        /*display: none;*/
-    }
-    </style>
 </head>
 
 <body style="height:100vh">
