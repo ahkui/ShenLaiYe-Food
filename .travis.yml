@@ -8,10 +8,10 @@ php:
   - '7.1'
 
 services:
-  - redis-server
   - mongodb
 
 before_script:
+  - sleep 15
   - mongo mydb_test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
   - pecl channel-update pecl.php.net
   - composer self-update
