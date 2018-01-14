@@ -29,19 +29,16 @@ class RestaurantController extends Controller
         $response = $this->googlePlaces->placeAutocomplete($keyword);
         $data = collect($response['predictions']);
         if ($data->count() > 0) {
-            if (request()->is_shop == 'true') {
-                return $this->convert_place_id($data[0]['place_id'], $data[0]['terms'][0]['value'], $keyword);
-            } else {
-                $data = $data->map(function ($item) use ($keyword) {
-                    return $this->convert_place_id($item['place_id'], $item['terms'][0]['value'], $keyword);
-                });
-                $db = $data;
-                $data = SearchResult::where('keyword', 'like', "%{$keyword}%")->get();
-                $union = $data->union($db);
-                $data = $union->unique('place_id')->values();
-            }
+            $data = $data->map(function ($item) use ($keyword) {
+                return $this->convert_place_id($item['place_id'], $item['terms'][0]['value'], $keyword);
+            });
+            $db = $data;
+            $data = SearchResult::where('keyword', 'like', "%{$keyword}%")->get();
+            $union = $data->union($db);
+            $data = $union->unique('place_id')->values();
         }
-
+        if (request()->is_shop == 'true')
+            return ['data'=>$data];
         return $data;
     }
 
@@ -136,28 +133,7 @@ class RestaurantController extends Controller
         return $data;
     }
 
-    public function test()
-    {
-        $type = 'food';
-        $location = '24.178829, 120.646438';
-        $radius = 1000;
-        $response = $this->googlePlaces->nearbySearch($location, $radius, [
-            'language'=> 'zh-TW',
-            // 'language'=>'en',
-            'type'=> $type,
-        ]);
-        $data = collect();
-        if ($response['status'] == 'OK') {
-            foreach ($response['results'] as $value) {
-                $data->push(Restaurant::firstOrCreate(['place_id'=>$value['place_id']], [
-                            'location'=> ['type'=>'Point', 'coordinates'=>[$value['geometry']['location']['lng'], $value['geometry']['location']['lat']]],
-                            'name'    => $value['name'],
-                            'place_id'=> $value['place_id'],
-                            'rating'  => isset($value['rating']) ? $value['rating'] : 0,
-                            'vicinity'=> $value['vicinity'],
-                        ]));
-            }
-        }
-        dump($data);
+    public function get_review(){
+        return [request()->input()];
     }
 }

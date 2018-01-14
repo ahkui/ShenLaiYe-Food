@@ -11,24 +11,10 @@
 |
 */
 
-Route::get('home', function () {
-    return view('welcome');
-});
-
-Route::get('review', function () {
-    return view('review');
-});
-
-Route::get('search', function () {
-    return view('search');
-});
-
 Route::get('/', 'RestaurantController@home')->name('home');
-Route::post('search', 'RestaurantController@search');
-Route::post('search/gps', 'RestaurantController@searchByGps');
-Route::post('search/near', 'RestaurantController@search_near');
-Route::post('review', function () {
-    return [request()->input(), request()->input()];
-});
+Route::post('search', 'RestaurantController@search')->name('search');
+Route::post('search/gps', 'RestaurantController@searchByGps')->name('search.gps');
+Route::post('search/near', 'RestaurantController@search_near')->name('search.near');
+Route::post('review', 'RestaurantController@get_review')->name('review');
 
 Auth::routes();

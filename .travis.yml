@@ -2,6 +2,9 @@ sudo: false
 os:
   - linux
 
+addons:
+   chrome: stable
+
 language: php
 
 php:
@@ -11,6 +14,7 @@ services:
   - mongodb
 
 before_script:
+  - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
   - sleep 15
   - mongo mydb_test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
   - pecl channel-update pecl.php.net
@@ -18,6 +22,7 @@ before_script:
   - pecl install mongodb
   - composer install --no-interaction --prefer-source
   - cp .env.travis .env
+  - php artisan dusk:install
   - php artisan key:generate
   - php artisan migrate
   - phpenv rehash
