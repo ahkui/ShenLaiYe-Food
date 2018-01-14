@@ -1,4 +1,4 @@
-sudo: false
+sudo: required
 os:
   - linux
 
@@ -14,13 +14,14 @@ services:
   - mongodb
 
 before_script:
-  - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
+  - google-chrome-stable --headless --disable-gpu --remote-debugging-port=8000 http://localhost &
+  - php artisan serve &
   - sleep 15
   - mongo mydb_test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
   - pecl channel-update pecl.php.net
   - composer self-update
   - pecl install mongodb
-  - composer install --no-interaction --prefer-source
+  - composer install --no-interaction --prefer-dist --no-suggest
   - cp .env.travis .env
   - php artisan dusk:install
   - php artisan key:generate
