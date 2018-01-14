@@ -15,6 +15,12 @@ class ExampleTest extends TestCase
      */
     public function testBasicTest()
     {
+        $this->get('/')->assertStatus(302);
+
+        $this->get('login')->assertStatus(200);
+
+        $this->get('register')->assertStatus(200);
+
         $password5 = str_random(5);
         $this->json('POST', 'register', [
             'name'                  => "$password5",
