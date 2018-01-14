@@ -24,6 +24,9 @@
                 <directory suffix=".php">./app/Service</directory>
                 <!-- <directory suffix=".php">./app/Http/Middleware</directory> -->
                 <directory suffix=".php">./app/Jobs</directory>
+                <directory suffix=".php">./app/Providers</directory>
+                <directory suffix=".php">./app/Console</directory>
+                <directory suffix=".php">./app/Exceptions</directory>
             </exclude>
         </whitelist>
     </filter>
