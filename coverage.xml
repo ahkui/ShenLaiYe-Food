@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1515927903">
-  <project timestamp="1515927903">
+<coverage generated="1515928591">
+  <project timestamp="1515928591">
     <package name="App\Console\Commands">
       <file name="D:\xampp\_webdata\ShenLaiYe-Food\app/Console/Commands/FetchLocations.php">
         <class name="App\Console\Commands\FetchLocations" namespace="App\Console\Commands">
