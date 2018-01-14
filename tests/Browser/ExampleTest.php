@@ -2,8 +2,8 @@
 
 namespace Tests\Browser;
 
-use Tests\DuskTestCase;
 use Laravel\Dusk\Browser;
+use Tests\DuskTestCase;
 
 class ExampleTest extends DuskTestCase
 {
@@ -32,7 +32,6 @@ class ExampleTest extends DuskTestCase
             $browser->click('@register-submit')->assertSee('ShenLaiYe');
             $browser->type('name', '小阿姨');
             $browser->click('@search')->waitForText('小阿姨的家 HOUSE 303')->assertSee('小阿姨的家 HOUSE 303');
-            
         });
     }
 }

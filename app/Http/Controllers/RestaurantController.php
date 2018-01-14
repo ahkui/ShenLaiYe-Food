@@ -37,8 +37,10 @@ class RestaurantController extends Controller
             $union = $data->union($db);
             $data = $union->unique('place_id')->values();
         }
-        if (request()->is_shop == 'true')
+        if (request()->is_shop == 'true') {
             return ['data'=>$data];
+        }
+
         return $data;
     }
 
@@ -133,7 +135,8 @@ class RestaurantController extends Controller
         return $data;
     }
 
-    public function get_review(){
+    public function get_review()
+    {
         return [request()->input()];
     }
 }
