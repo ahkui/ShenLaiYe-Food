@@ -1,12 +1,7 @@
-sudo: required
-dist: trusty
-group: deprecated-2017Q4
+sudo: false
 
 os:
   - linux
-
-addons:
-   chrome: stable
 
 language: php
 
@@ -17,8 +12,6 @@ services:
   - mongodb
 
 before_script:
-  - google-chrome-stable --headless --disable-gpu --remote-debugging-port=8000 http://localhost &
-  - php artisan serve &
   - sleep 15
   - mongo mydb_test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
   - pecl channel-update pecl.php.net
@@ -26,7 +19,6 @@ before_script:
   - pecl install mongodb
   - composer install --no-interaction --prefer-dist --no-suggest
   - cp .env.travis .env
-  - php artisan dusk:install
   - php artisan key:generate
   - php artisan migrate
   - phpenv rehash
