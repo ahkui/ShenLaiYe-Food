@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1515928591">
-  <project timestamp="1515928591">
+<coverage generated="1515928657">
+  <project timestamp="1515928657">
     <package name="App\Console\Commands">
       <file name="D:\xampp\_webdata\ShenLaiYe-Food\app/Console/Commands/FetchLocations.php">
         <class name="App\Console\Commands\FetchLocations" namespace="App\Console\Commands">
@@ -356,110 +356,6 @@
         <metrics loc="44" ncloc="28" classes="1" methods="2" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="2" coveredstatements="0" elements="4" coveredelements="0"/>
       </file>
     </package>
-    <package name="App\Service">
-      <file name="D:\xampp\_webdata\ShenLaiYe-Food\app/Service/PlacesApi.php">
-        <class name="App\Service\PlacesApi" namespace="App\Service">
-          <metrics complexity="27" methods="19" coveredmethods="6" conditionals="0" coveredconditionals="0" statements="77" coveredstatements="39" elements="96" coveredelements="45"/>
-        </class>
-        <line num="52" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="2"/>
-        <line num="54" type="stmt" count="2"/>
-        <line num="56" type="stmt" count="2"/>
-        <line num="57" type="stmt" count="2"/>
-        <line num="59" type="stmt" count="2"/>
-        <line num="72" type="method" name="nearbySearch" visibility="public" complexity="1" crap="1" count="1"/>
-        <line num="74" type="stmt" count="1"/>
-        <line num="76" type="stmt" count="1"/>
-        <line num="77" type="stmt" count="1"/>
-        <line num="79" type="stmt" count="1"/>
-        <line num="92" type="method" name="textSearch" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="94" type="stmt" count="0"/>
-        <line num="96" type="stmt" count="0"/>
-        <line num="97" type="stmt" count="0"/>
-        <line num="99" type="stmt" count="0"/>
-        <line num="115" type="method" name="radarSearch" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="117" type="stmt" count="0"/>
-        <line num="119" type="stmt" count="0"/>
-        <line num="121" type="stmt" count="0"/>
-        <line num="123" type="stmt" count="0"/>
-        <line num="136" type="method" name="placeDetails" visibility="public" complexity="1" crap="1" count="1"/>
-        <line num="138" type="stmt" count="1"/>
-        <line num="140" type="stmt" count="1"/>
-        <line num="142" type="stmt" count="1"/>
-        <line num="144" type="stmt" count="1"/>
-        <line num="157" type="method" name="placeAutocomplete" visibility="public" complexity="1" crap="1" count="1"/>
-        <line num="159" type="stmt" count="1"/>
-        <line num="161" type="stmt" count="1"/>
-        <line num="163" type="stmt" count="1"/>
-        <line num="165" type="stmt" count="1"/>
-        <line num="178" type="method" name="queryAutocomplete" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="180" type="stmt" count="0"/>
-        <line num="182" type="stmt" count="0"/>
-        <line num="184" type="stmt" count="0"/>
-        <line num="186" type="stmt" count="0"/>
-        <line num="200" type="method" name="addPlace" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="202" type="stmt" count="0"/>
-        <line num="204" type="stmt" count="0"/>
-        <line num="206" type="stmt" count="0"/>
-        <line num="220" type="method" name="deletePlace" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="222" type="stmt" count="0"/>
-        <line num="224" type="stmt" count="0"/>
-        <line num="226" type="stmt" count="0"/>
-        <line num="228" type="stmt" count="0"/>
-        <line num="240" type="method" name="makeRequest" visibility="private" complexity="2" crap="2.00" count="1"/>
-        <line num="244" type="stmt" count="1"/>
-        <line num="248" type="stmt" count="1"/>
-        <line num="249" type="stmt" count="0"/>
-        <line num="251" type="stmt" count="1"/>
-        <line num="254" type="stmt" count="1"/>
-        <line num="256" type="stmt" count="1"/>
-        <line num="257" type="stmt" count="1"/>
-        <line num="258" type="stmt" count="1"/>
-        <line num="261" type="stmt" count="1"/>
-        <line num="272" type="stmt" count="1"/>
-        <line num="281" type="method" name="convertToCollection" visibility="private" complexity="2" crap="2" count="1"/>
-        <line num="283" type="stmt" count="1"/>
-        <line num="285" type="stmt" count="1"/>
-        <line num="286" type="stmt" count="1"/>
-        <line num="289" type="stmt" count="1"/>
-        <line num="295" type="method" name="setStatus" visibility="private" complexity="1" crap="1" count="1"/>
-        <line num="297" type="stmt" count="1"/>
-        <line num="298" type="stmt" count="1"/>
-        <line num="303" type="method" name="getStatus" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="305" type="stmt" count="0"/>
-        <line num="311" type="method" name="getKey" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="313" type="stmt" count="0"/>
-        <line num="321" type="method" name="setKey" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="323" type="stmt" count="0"/>
-        <line num="325" type="stmt" count="0"/>
-        <line num="331" type="method" name="checkKey" visibility="private" complexity="2" crap="2.15" count="1"/>
-        <line num="333" type="stmt" count="1"/>
-        <line num="334" type="stmt" count="0"/>
-        <line num="336" type="stmt" count="1"/>
-        <line num="349" type="method" name="prepareNearbySearchParams" visibility="private" complexity="5" crap="7.35" count="1"/>
-        <line num="351" type="stmt" count="1"/>
-        <line num="352" type="stmt" count="1"/>
-        <line num="354" type="stmt" count="1"/>
-        <line num="355" type="stmt" count="1"/>
-        <line num="357" type="stmt" count="0"/>
-        <line num="359" type="stmt" count="0"/>
-        <line num="360" type="stmt" count="0"/>
-        <line num="361" type="stmt" count="0"/>
-        <line num="363" type="stmt" count="1"/>
-        <line num="364" type="stmt" count="0"/>
-        <line num="367" type="stmt" count="1"/>
-        <line num="379" type="method" name="prepareRadarSearchParams" visibility="private" complexity="2" crap="6" count="0"/>
-        <line num="381" type="stmt" count="0"/>
-        <line num="382" type="stmt" count="0"/>
-        <line num="384" type="stmt" count="0"/>
-        <line num="385" type="stmt" count="0"/>
-        <line num="386" type="stmt" count="0"/>
-        <line num="389" type="stmt" count="0"/>
-        <line num="397" type="method" name="verifySSL" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="399" type="stmt" count="0"/>
-        <line num="401" type="stmt" count="0"/>
-        <metrics loc="403" ncloc="226" classes="1" methods="19" coveredmethods="6" conditionals="0" coveredconditionals="0" statements="77" coveredstatements="39" elements="96" coveredelements="45"/>
-      </file>
-    </package>
-    <metrics files="28" loc="1416" ncloc="894" classes="19" methods="58" coveredmethods="32" conditionals="0" coveredconditionals="0" statements="213" coveredstatements="148" elements="271" coveredelements="180"/>
+    <metrics files="27" loc="1013" ncloc="668" classes="18" methods="39" coveredmethods="26" conditionals="0" coveredconditionals="0" statements="136" coveredstatements="109" elements="175" coveredelements="135"/>
   </project>
 </coverage>
