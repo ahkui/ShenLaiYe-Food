@@ -64,9 +64,9 @@ class ExampleTest extends TestCase
         $this
             ->actingAs(User::first())
             ->json('POST', 'search/gps', [
-                    'longitude'=> 120.646705,
-                    'latitude' => 24.178820,
-                ])
+                'longitude'=> 120.646705,
+                'latitude' => 24.178820,
+            ])
             ->assertJson(SearchResult::get()->toArray());
         $this
             ->actingAs(User::first())
