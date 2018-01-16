@@ -13,7 +13,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.css" rel="stylesheet">
 </head>
 
-<body style="height:100vh">
+<body>
     <div id="app">
         <nav class="navbar navbar-expand-sm navbar-dark bg-dark fixed-top">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navBar">
@@ -22,20 +22,7 @@
             <a class="navbar-brand" href="{{route('home')}}">{{config('app.name', 'Laravel')}}</a>
             <div class="collapse navbar-collapse" id="navBar">
                 <ul class="navbar-nav mr-auto mt-2 mt-sm-0">
-                    @auth
-                    <li class="nav-item active">
-                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" data-toggle="modal" data-target="#exampleModal">評分</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link disabled" href="#">Disabled</a>
-                    </li>
-                    @endauth
+                    @auth @endauth
                 </ul>
                 <ul class="navbar-nav mt-2 mt-sm-0">
                     @guest
@@ -57,6 +44,9 @@
                 </ul>
             </div>
         </nav>
+        <div id="axios-progress" class="progress">
+            <div class="w-100 progress-bar progress-bar-striped progress-bar-animated"></div>
+        </div>
         @yield('content')
     </div>
     <script src="{{ asset('js/app.js') }}"></script>
@@ -66,6 +56,9 @@
     $('body').css('padding-top', navheight + 'px')
     </script>
     @yield('script')
+    <script type="text/javascript">
+    </script>
+    @component('components.modal.review') @endcomponent
 </body>
 
 </html>

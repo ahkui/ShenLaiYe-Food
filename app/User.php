@@ -1,6 +1,8 @@
 <?php
 
 namespace App;
+use App\RestaurantComment;
+use App\RestaurantRate;
 
 // use Illuminate\Auth\Authenticatable as AuthenticableTrait;
 // use Illuminate\Contracts\Auth\Authenticatable;
@@ -31,14 +33,4 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
-
-    public function restaurant_comments()
-    {
-        return $this->embedsMany('RestaurantComment');
-    }
-
-    public function restaurant_rates()
-    {
-        return $this->embedsMany('RestaurantRate');
-    }
 }

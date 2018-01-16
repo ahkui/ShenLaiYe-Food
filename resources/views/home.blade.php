@@ -30,54 +30,20 @@
     </div>
 </div>
 <!-- Modal -->
-<div class="modal fade" id="review_model" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">評分系統</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="form-group">
-                        <p>
-                            <label>星級:
-                                <label>
-                                    <input name="rate" type="radio" value="1"> 一顆星
-                                </label>
-                                <label>
-                                    <input name="rate" type="radio" value="2"> 兩顆星
-                                </label>
-                                <label>
-                                    <input name="rate" type="radio" value="3"> 三顆星
-                                </label>
-                                <label>
-                                    <input name="rate" type="radio" value="4"> 四顆星
-                                </label>
-                                <label>
-                                    <input name="rate" type="radio" value="5"> 五顆星
-                                </label>
-                        </p>
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputPassword1">評論</label>
-                        <input type="text" class="form-control" id="exampleInputPassword1" placeholder="請輸入評論">
-                    </div>
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                        <label class="form-check-label" for="exampleCheck1">確認無誤</label>
-                    </div>
-                    <button type="submit" class="btn btn-primary">送出</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
 @endsection @section('script')
 <!-- Scripts -->
 <script>
+var prev_link;
+var prev_data;
+var is_loading = false
+var loading_stop = () => {
+    $('#axios-progress').fadeOut(200)
+    is_loading = false
+};
+var loading_start = () => {
+    $('#axios-progress').fadeIn(200)
+    is_loading = true
+};
 var default_radius = 100;
 $('#search-bar').css('width', '100%')
 $('#search-bar').css('padding', '5px')
@@ -87,14 +53,17 @@ var searchbar_height = $('#search-bar').height() + $('#search-bar').css('padding
 $('#side-panel').css('margin-top', searchbar_height + 'px').css('height', 'calc(100vh - ' + navheight + 'px - ' + searchbar_height + 'px)')
 $('.content').css('height', 'calc(100vh - ' + navheight + 'px)')
 $('#map').css('height', '100%')
-
+var loading_error = (error) => {
+    loading_stop();
+    console.error(error)
+}
 var generate_search_result = function(response) {
+    loading_stop();
     $('#side-panel .list-group').html("");
     for (var item in response.data) {
         item = response.data[item]
         var id = item['_id']
         var name = item['name']
-        console.log(name)
         var vicinity = item['vicinity']
         var lat = item['location']['coordinates'][1];
         var lng = item['location']['coordinates'][0];
@@ -105,6 +74,7 @@ var generate_search_result = function(response) {
 };
 
 var generate_maker_and_list = function(response) {
+    loading_stop();
     if (response.data.center)
         map.panTo({ lat: response.data.center[1], lng: response.data.center[0] });
     $('#side-panel .list-group').html("");
@@ -112,7 +82,6 @@ var generate_maker_and_list = function(response) {
     for (var item in response.data.data) {
         item = response.data.data[item]
         var name = item['name']
-        console.log(name)
         var rating = item['rating']
         var vicinity = item['vicinity']
         var id = item['_id']
@@ -126,43 +95,87 @@ var generate_maker_and_list = function(response) {
 };
 
 var generate_review = function(response) {
-    console.log(response)
+    loading_stop();
+    review_modal_load((e) => {
+        var el = $(e.currentTarget)
+        var reviews_count = el.find("#reviews_count>a:first")
+        var reviews_rating = el.find('#reviews_rating')
+        var title = el.find('.modal-title')
+        var id = el.find('[name=id]')
+        title.html(response.data.name)
+        reviews_count.html(response.data.reviews_count)
+        reviews_rating.html(response.data.rating)
+        el.find('#rating').barrating('set', response.data.rating)
+        el.find('#user-rating').barrating('set', response.data.user_rate)
+        id.val(response.data._id)
+        var comment_area = el.find('#comment_area')
+        var name
+        var comment
+        var date
+        var comment_data = response.data.restaurant_comments
+        comment_area.html("")
+        for (key in comment_data) {
+            if (comment_data.hasOwnProperty(key) && // These are explained
+                /^0$|^[1-9]\d*$/.test(key) && // and then hidden
+                key <= 4294967294 // away below
+            ) {
+                name = comment_data[key].user.email
+                comment = comment_data[key].comment
+                date = comment_data[key].updated_at
+                comment_area.prepend(
+                    '<div class="list-group-item flex-column align-items-start"><div class="d-flex w-100 justify-content-between"><h5 class="mb-1">' + name + '</h5><small>' + date + '</small></div><small class="text-muted">' + comment + '</small></div>'
+                );
+            }
+        }
+    }, (e) => {}, (form, modal) => {
+        var handle_success = (response) => {
+            modal.modal('hide')
+        }
+        axios.put('{{route("review.save")}}', $(form).serialize())
+            .then(handle_success)
+            .catch(loading_error);
+    })
+    $('#review-modal').modal()
 };
 
 function search_submit(el) {
     event.preventDefault();
-    var data = $(el).serialize()
-    axios.post('{{route('search')}}', data)
-        .then(function(response) {
-            if (response.data.constructor === Object) {
-                generate_maker_and_list(response)
-            } else if (response.data.constructor === Array)
-                generate_search_result(response)
-        })
-        .catch(function(error) {
-            console.log(error);
-        });
+    if (!is_loading) {
+        loading_start();
+        var data = $(el).serialize()
+        axios.post('{{route("search")}}', data)
+            .then(function(response) {
+                if (response.data.constructor === Object) {
+                    generate_maker_and_list(response)
+                } else if (response.data.constructor === Array)
+                    generate_search_result(response)
+            })
+            .catch(loading_error);
+    }
     return false;
 }
 
 function select_address(id, el, lat = false, lng = false) {
-    var target = $(el)
-    axios.post('{{route('search.near')}}', { id: id, radius: default_radius })
-        .then(generate_maker_and_list)
-        .catch(function(error) {
-            console.log(error);
-        });
+    event.preventDefault();
+    if (!is_loading) {
+        loading_start();
+        var target = $(el)
+        axios.post('{{route("search.near")}}', { id: id, radius: default_radius })
+            .then(generate_maker_and_list)
+            .catch(loading_error);
+    }
     return false;
 }
 
 var show_restaurant_detail = (id, el) => {
     event.preventDefault();
-    var el = $(el)
-    axios.post('{{route('review')}}', { id: id })
-        .then(generate_review)
-        .catch(function(error) {
-            console.log(error);
-        });
+    if (!is_loading) {
+        loading_start();
+        var el = $(el)
+        axios.post('{{route("review")}}', { id: id })
+            .then(generate_review)
+            .catch(loading_error);
+    }
     return false;
 }
 
@@ -206,17 +219,15 @@ function deleteMarkers() {
 }
 
 function activeGPS() {
-    if (navigator.geolocation) {
+    if (navigator.geolocation)
         navigator.geolocation.getCurrentPosition(geoYes, geoNo);
-    } else {
+    else
         geoNo()
-    }
 }
 
 function geoYes(e) {
     initMap(e.coords.latitude, e.coords.longitude)
-    console.log(e.coords.latitude, e.coords.longitude)
-    axios.post('{{route('search.gps')}}', { latitude: e.coords.latitude, longitude: e.coords.longitude, radius: default_radius })
+    axios.post('{{route("search.gps")}}', { latitude: e.coords.latitude, longitude: e.coords.longitude, radius: default_radius })
         .then(generate_maker_and_list)
         .catch(function(error) {
             geoNo()
@@ -225,11 +236,14 @@ function geoYes(e) {
 
 function geoNo() {
     initMap();
+    loading_stop()
+    alert("GPS 獲取失敗！請手動輸入店家或地址。")
 }
+
 (function($) {
     $(window).on("load", function() {
         $('#side-panel').mCustomScrollbar({
-            theme:'minimal-dark'
+            theme: 'minimal-dark'
         })
     });
 })(jQuery);

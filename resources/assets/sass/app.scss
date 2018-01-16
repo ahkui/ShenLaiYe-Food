@@ -1,6 +1,9 @@
 
 // Fonts
 @import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
+@import "node_modules/font-awesome/scss/font-awesome.scss";
+@import "../../../node_modules/jquery-bar-rating/dist/themes/fontawesome-stars-o.css";
+@import "../../../node_modules/jquery-bar-rating/dist/themes/fontawesome-stars.css";
 
 // Variables
 @import "variables";
@@ -8,3 +11,20 @@
 // Bootstrap
 // @import "~bootstrap-sass/assets/stylesheets/bootstrap";
 @import "~bootstrap/scss/bootstrap";
+
+body{
+    height:100vh;
+}
+
+#app{
+    position: relative;
+}
+
+#axios-progress{
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 8px;
+    z-index: 9999999;
+    top: -8px;
+}

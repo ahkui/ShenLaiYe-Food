@@ -16,5 +16,6 @@ Route::post('search', 'RestaurantController@search')->name('search');
 Route::post('search/gps', 'RestaurantController@searchByGps')->name('search.gps');
 Route::post('search/near', 'RestaurantController@search_near')->name('search.near');
 Route::post('review', 'RestaurantController@get_review')->name('review');
+Route::put('review', 'RestaurantController@submit_review')->name('review.save');
 
 Auth::routes();

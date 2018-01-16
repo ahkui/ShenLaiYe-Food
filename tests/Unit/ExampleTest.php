@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use App\SearchResult;
 use App\User;
+use App\Restaurant;
 use Tests\TestCase;
 
 class ExampleTest extends TestCase
@@ -57,8 +58,11 @@ class ExampleTest extends TestCase
             ->actingAs(User::first())
             ->json('POST', 'search', ['name'=>'小阿姨'])
             ->assertJson(SearchResult::where('keyword', 'like', '小阿姨')->get()->toArray());
-        // ->assertStatus(200);
+
         foreach (SearchResult::get() as $value) {
+            $value->delete();
+        }
+        foreach (Restaurant::get() as $value) {
             $value->delete();
         }
         $this
@@ -68,32 +72,49 @@ class ExampleTest extends TestCase
                 'latitude' => 24.178820,
             ])
             ->assertJson(SearchResult::get()->toArray());
+
+        $res = Restaurant::first();
         $this
             ->actingAs(User::first())
             ->json('POST', 'review', [
-                    'longitude'=> 120.646705,
-                    'latitude' => 24.178820,
+                    'id'=> $res->_id,
                 ])
-            ->assertJson([[
-                    'longitude'=> 120.646705,
-                    'latitude' => 24.178820,
-                ]]);
-
-        // $this
-        //     ->actingAs(User::first())
-        //     ->json('POST','search',['name'=>"小阿姨"])
-        // $response = $this->json('POST', 'login', [
-        //     "email" => "$password@Sally.com",
-        //     "password" => "$password5"."wsqer",
-        //     "_token" => csrf_token(),
-        // ])->assertStatus(302);
-
-        // $response = $this->json('POST', 'login', [
-        //     "email" => "$password@Sally.com",
-        //     "password" => "asd",
-        //     "_token" => csrf_token(),
-        // ])->assertStatus(302);
-
-        // $response = $this->json('POST', 'logout', [])->assertStatus(302);
+            ->assertStatus(200);
+        $this
+            ->actingAs(User::first())
+            ->json('POST', 'review', [
+                    'id'=> $res->_id,
+                ])
+            ->assertStatus(200);
+        $this
+            ->actingAs(User::first())
+            ->json('PUT', 'review', [
+                    'id'=> $res->_id,
+                    'rate'=> 5,
+                    'comment'=> "qwe123zxcasd",
+                ])
+            ->assertStatus(200);
+        $this
+            ->actingAs(User::first())
+            ->json('PUT', 'review', [
+                    'id'=> $res->_id,
+                    'rate'=> 5,
+                    'comment'=> "qwe123zx2casd",
+                ])
+            ->assertStatus(200);
+        $this
+            ->actingAs(User::first())
+            ->json('PUT', 'review', [
+                    'id'=> $res->_id,
+                    'rate'=> 5,
+                    'comment'=> "qwe123zxc4asd",
+                ])
+            ->assertStatus(200);
+        $this
+            ->actingAs(User::first())
+            ->json('POST', 'review', [
+                    'id'=> $res->_id,
+                ])
+            ->assertStatus(200);
     }
 }

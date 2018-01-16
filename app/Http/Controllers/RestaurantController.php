@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Jobs\FetchNextPage;
 use App\Restaurant;
+use App\RestaurantComment;
+use App\RestaurantRate;
 use App\SearchResult;
 use App\Service\PlacesApi;
 use Illuminate\Http\Request;
@@ -106,7 +108,7 @@ class RestaurantController extends Controller
 
         $union = $data->union($db);
         $data = $union->unique('place_id');
-        $data = ['data'=>$data->values(), 'center'=>$search->location['coordinates']];
+        $data = ['data'=>$this->calculate_rating($data->values()), 'center'=>$search->location['coordinates']];
 
         return $data;
     }
@@ -137,6 +139,55 @@ class RestaurantController extends Controller
 
     public function get_review()
     {
-        return [request()->input()];
+        $restaurant = Restaurant::find(request()->id);
+        $restaurant->restaurant_comments->map(function($item,$key){
+            $item->user;
+            return $item;
+        });
+        $restaurant->reviews_count = $restaurant->restaurant_rates->count();
+        $restaurant->rating = round($restaurant->restaurant_rates->avg('rate'),1);
+        $restaurant->save();
+        // if($restaurant->restaurant_rates)
+            $restaurant->user_rate = $restaurant->restaurant_rates->where('user_id',auth()->user()->id)->first();
+        if($restaurant->user_rate)
+            $restaurant->user_rate = $restaurant->user_rate->rate;
+        return $this->calculate_rating($restaurant);
+    }
+
+    public function submit_review()
+    {
+        $restaurant = Restaurant::find(request()->id);
+        if(request()->comment) {
+            $comment = new RestaurantComment();
+            $comment->user_id = auth()->user()->id;
+            $comment->comment = request()->comment;
+            $restaurant->restaurant_comments()->save($comment);
+        }
+        $recent_rate = null;
+        if($restaurant->restaurant_rates)
+            $recent_rate = $restaurant->restaurant_rates->where('user_id',auth()->user()->id)->first();
+        if(!$recent_rate) {
+            $recent_rate = new RestaurantRate();
+            $recent_rate->user_id = auth()->user()->id;
+        }
+        $recent_rate->rate = request()->rate;
+        $restaurant->restaurant_rates()->save($recent_rate);
+        return $restaurant;
+    }
+
+    private function calculate_rating($item){
+        if(get_class($item) == "Illuminate\Support\Collection")
+            return $item->map(function($item,$key){
+                $item->rating = round($item->restaurant_rates->avg('rate'),1);
+                $item->save();
+                return $item;
+            });
+
+        if(get_class($item) == "App\Restaurant") {
+            $item->rating = round($item->restaurant_rates->avg('rate'),1);
+                $item->save();
+            return $item;
+        }
+        return $item;
     }
 }
