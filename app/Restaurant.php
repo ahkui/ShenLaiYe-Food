@@ -1,8 +1,6 @@
 <?php
 
 namespace App;
-use App\RestaurantComment;
-use App\RestaurantRate;
 
 use Jenssegers\Mongodb\Eloquent\Model;
 

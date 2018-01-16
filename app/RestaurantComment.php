@@ -3,11 +3,9 @@
 namespace App;
 
 use Jenssegers\Mongodb\Eloquent\Model;
-use App\User;
 
 class RestaurantComment extends Model
 {
-
     /**
      * The attributes that are mass assignable.
      *

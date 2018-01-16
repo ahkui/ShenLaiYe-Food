@@ -1,8 +1,6 @@
 <?php
 
 namespace App;
-use App\RestaurantComment;
-use App\RestaurantRate;
 
 // use Illuminate\Auth\Authenticatable as AuthenticableTrait;
 // use Illuminate\Contracts\Auth\Authenticatable;

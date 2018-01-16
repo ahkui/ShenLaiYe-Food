@@ -1,13 +1,11 @@
 <?php
 
 namespace App;
-use App\User;
 
 use Jenssegers\Mongodb\Eloquent\Model;
 
 class RestaurantRate extends Model
 {
-
     /**
      * The attributes that are mass assignable.
      *

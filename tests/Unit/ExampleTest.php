@@ -2,9 +2,9 @@
 
 namespace Tests\Unit;
 
+use App\Restaurant;
 use App\SearchResult;
 use App\User;
-use App\Restaurant;
 use Tests\TestCase;
 
 class ExampleTest extends TestCase
@@ -89,25 +89,25 @@ class ExampleTest extends TestCase
         $this
             ->actingAs(User::first())
             ->json('PUT', 'review', [
-                    'id'=> $res->_id,
-                    'rate'=> 5,
-                    'comment'=> "qwe123zxcasd",
+                    'id'     => $res->_id,
+                    'rate'   => 5,
+                    'comment'=> 'qwe123zxcasd',
                 ])
             ->assertStatus(200);
         $this
             ->actingAs(User::first())
             ->json('PUT', 'review', [
-                    'id'=> $res->_id,
-                    'rate'=> 5,
-                    'comment'=> "qwe123zx2casd",
+                    'id'     => $res->_id,
+                    'rate'   => 5,
+                    'comment'=> 'qwe123zx2casd',
                 ])
             ->assertStatus(200);
         $this
             ->actingAs(User::first())
             ->json('PUT', 'review', [
-                    'id'=> $res->_id,
-                    'rate'=> 5,
-                    'comment'=> "qwe123zxc4asd",
+                    'id'     => $res->_id,
+                    'rate'   => 5,
+                    'comment'=> 'qwe123zxc4asd',
                 ])
             ->assertStatus(200);
         $this
