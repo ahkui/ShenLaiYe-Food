@@ -195,6 +195,7 @@ class RestaurantController extends Controller
     {
         $item->rating = round($item->restaurant_rates->avg('rate'), 1);
         $item->save();
+
         return $item;
     }
 }
