@@ -22,9 +22,7 @@
             <a class="navbar-brand" href="{{route('home')}}">{{config('app.name', 'Laravel')}}</a>
             <div class="collapse navbar-collapse" id="navBar">
                 <ul class="navbar-nav mr-auto mt-2 mt-sm-0">
-                    @auth
-                    @yield('navbar-left')
-                    @endauth
+                    @auth @yield('navbar-left') @endauth
                 </ul>
                 <ul class="navbar-nav mt-2 mt-sm-0">
                     @guest
@@ -56,11 +54,9 @@
     <script>
     var navheight = Math.ceil($('nav').height() + $('nav').css('padding-top').replace('px', '') * 2)
     $('body').css('padding-top', navheight + 'px')
+    $('#axios-progress').fadeOut(0)
     </script>
-    @yield('script')
-    <script type="text/javascript">
-    </script>
-    @component('components.modal.review') @endcomponent
+    @yield('script') @component('components.modal.review') @endcomponent
 </body>
 
 </html>

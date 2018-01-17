@@ -1,6 +1,6 @@
 @extends('layouts.app') @section('navbar-left')
 <li class="nav-item">
-    <a class="nav-link" href="#" onclick="show_restaurant_detail('{{$suggest_id}}','今日推薦 - ');return false">今日推薦</a>
+    <a class="nav-link" href="#" onclick="show_suggest_restaurant_detail();return false">今日推薦</a>
 </li>
 @endsection @section('content')
 <div class="container-fulid" id="display-area">
@@ -171,13 +171,13 @@ function select_address(id, el, lat = false, lng = false) {
     return false;
 }
 
-var show_restaurant_detail = (id,addon_title=null) => {
+var show_restaurant_detail = (id, addon_title = null) => {
     event.preventDefault();
     if (!is_loading) {
         loading_start();
         axios.post('{{route("review")}}', { id: id })
-            .then((response)=>{
-                if(addon_title)
+            .then((response) => {
+                if (addon_title)
                     response.data.name = addon_title + response.data.name;
                 generate_review(response)
             })
@@ -185,6 +185,39 @@ var show_restaurant_detail = (id,addon_title=null) => {
     }
     return false;
 }
+
+var show_restaurant_detail = (id, addon_title = null) => {
+    event.preventDefault();
+    if (!is_loading) {
+        loading_start();
+        axios.post('{{route("review")}}', { id: id })
+            .then((response) => {
+                if (addon_title)
+                    response.data.name = addon_title + response.data.name;
+                generate_review(response)
+            })
+            .catch(loading_error);
+    }
+    return false;
+}
+
+var suggest_id = false;
+var show_suggest_restaurant_detail = () => {
+    if (!suggest_id) {
+        if (!is_loading) {
+            loading_start();
+            axios.post('{{route("suggest")}}')
+                .then((response) => {
+                    suggest_id = response.data
+                    loading_stop()
+                    show_suggest_restaurant_detail()
+                })
+                .catch(loading_error)
+        }
+    } else 
+        show_restaurant_detail(suggest_id, '今日推薦 - ')
+}
+
 
 function initMap(lat = 24.178820, lng = 120.646705) {
     var gps = { lat: lat, lng: lng };
@@ -226,6 +259,7 @@ function deleteMarkers() {
 }
 
 function activeGPS() {
+    loading_start()
     if (navigator.geolocation)
         navigator.geolocation.getCurrentPosition(geoYes, geoNo);
     else

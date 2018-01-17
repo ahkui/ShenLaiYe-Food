@@ -25,14 +25,7 @@ class RestaurantController extends Controller
 
     public function home()
     {
-        if(!Cache::has('suggest')) {
-            $suggest = Restaurant::orderBy('rating','dces')->first();
-            if($suggest)
-                Cache::put('suggest', $suggest->_id, Carbon::tomorrow());
-        }
-        return view('home')->with([
-            'suggest_id'=>Cache::get('suggest',null),
-        ]);
+        return view('home');
     }
 
     public function search()
@@ -180,6 +173,15 @@ class RestaurantController extends Controller
         $recent_rate->rate = request()->rate;
         $restaurant->restaurant_rates()->save($recent_rate);
         return $this->calculate_rating($restaurant);
+    }
+
+    function get_suggest(){
+        if(!Cache::has('suggest')) {
+            $suggest = Restaurant::orderBy('rating','dces')->first();
+            if($suggest)
+                Cache::put('suggest', $suggest->_id, Carbon::tomorrow());
+        }
+        return Cache::get('suggest', null);
     }
 
     private function calculate_rating($item)
