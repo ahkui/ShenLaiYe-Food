@@ -6,6 +6,7 @@ use App\Restaurant;
 use App\SearchResult;
 use App\User;
 use Tests\TestCase;
+use Cache;
 
 class ExampleTest extends TestCase
 {
@@ -116,5 +117,15 @@ class ExampleTest extends TestCase
                     'id'=> $res->_id,
                 ])
             ->assertStatus(200);
+        $this
+            ->actingAs(User::first())
+            ->json('POST', 'suggest', [])
+            ->assertStatus(200)
+            ->assertSee(Cache::get('suggest', null));
+        $this
+            ->actingAs(User::first())
+            ->json('POST', 'suggest', [])
+            ->assertStatus(200)
+            ->assertSee(Cache::get('suggest', null));
     }
 }
