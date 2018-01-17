@@ -52,6 +52,12 @@ class ExampleTest extends TestCase
             ->get('/')
             ->assertStatus(200);
         $this
+            ->get('password/reset')
+            ->assertStatus(200);
+        $this
+            ->get('password/reset/123')
+            ->assertStatus(200);
+        $this
             ->actingAs(User::first())
             ->json('POST', 'search', ['name'=>'小阿姨'])
             ->assertJson(SearchResult::where('keyword', 'like', '小阿姨')->get()->toArray());
@@ -59,6 +65,10 @@ class ExampleTest extends TestCase
             ->actingAs(User::first())
             ->json('POST', 'search', ['name'=>'小阿姨'])
             ->assertJson(SearchResult::where('keyword', 'like', '小阿姨')->get()->toArray());
+        $this
+            ->actingAs(User::first())
+            ->json('POST', 'search', ['name'=>'小阿姨','is_shop'=>'true'])
+            ->assertJson(['data'=>SearchResult::where('keyword', 'like', '小阿姨')->get()->toArray()]);
 
         foreach (SearchResult::get() as $value) {
             $value->delete();

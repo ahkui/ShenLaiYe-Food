@@ -23,6 +23,8 @@
             <exclude>
                 <directory suffix=".php">./app/Service</directory>
                 <directory suffix=".php">./app/Jobs</directory>
+                <directory suffix=".php">./app/Providers</directory>
+                <directory suffix=".php">./app/Console</directory>
             </exclude>
         </whitelist>
     </filter>

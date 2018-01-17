@@ -191,24 +191,10 @@ class RestaurantController extends Controller
         return Cache::get('suggest', null);
     }
 
-    private function calculate_rating($item)
+    private function calculate_rating(Restaurant $item)
     {
-        if (get_class($item) == "Illuminate\Support\Collection") {
-            return $item->map(function ($item, $key) {
-                $item->rating = round($item->restaurant_rates->avg('rate'), 1);
-                $item->save();
-
-                return $item;
-            });
-        }
-
-        if (get_class($item) == "App\Restaurant") {
-            $item->rating = round($item->restaurant_rates->avg('rate'), 1);
-            $item->save();
-
-            return $item;
-        }
-
+        $item->rating = round($item->restaurant_rates->avg('rate'), 1);
+        $item->save();
         return $item;
     }
 }
