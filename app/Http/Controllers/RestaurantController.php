@@ -8,9 +8,9 @@ use App\RestaurantComment;
 use App\RestaurantRate;
 use App\SearchResult;
 use App\Service\PlacesApi;
-use Illuminate\Http\Request;
-use Carbon\Carbon;
 use Cache;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class RestaurantController extends Controller
 {
@@ -20,18 +20,19 @@ class RestaurantController extends Controller
     {
         $this->middleware('auth');
         $this->googlePlaces = new PlacesApi(env('GOOGLE_PLACE_API_KEY'));
-
     }
 
     public function home()
     {
-        if(!Cache::has('suggest')) {
-            $suggest = Restaurant::orderBy('rating','dces')->first();
-            if($suggest)
+        if (!Cache::has('suggest')) {
+            $suggest = Restaurant::orderBy('rating', 'dces')->first();
+            if ($suggest) {
                 Cache::put('suggest', $suggest->_id, Carbon::tomorrow());
+            }
         }
+
         return view('home')->with([
-            'suggest_id'=>Cache::get('suggest',null),
+            'suggest_id'=> Cache::get('suggest', null),
         ]);
     }
 
@@ -88,6 +89,7 @@ class RestaurantController extends Controller
                 (float) request()->latitude,
             ],
         ];
+
         return $this->search_near($data);
     }
 
@@ -118,7 +120,7 @@ class RestaurantController extends Controller
                     'place_id'=> $value['place_id'],
                     'vicinity'=> $value['vicinity'],
                 ]);
-                if(!$res->rating && isset($value['rating'])){
+                if (!$res->rating && isset($value['rating'])) {
                     $recent_rate = new RestaurantRate();
                     $recent_rate->rate = $value['rating'];
                     $res->restaurant_rates()->save($recent_rate);
@@ -154,12 +156,15 @@ class RestaurantController extends Controller
         $restaurant = Restaurant::find(request()->id);
         $restaurant->restaurant_comments->map(function ($item, $key) {
             $item->user;
+
             return $item;
         });
         $restaurant->reviews_count = $restaurant->restaurant_rates->count();
         $restaurant->user_rate = $restaurant->restaurant_rates->where('user_id', auth()->user()->id)->first();
-        if ($restaurant->user_rate) 
+        if ($restaurant->user_rate) {
             $restaurant->user_rate = $restaurant->user_rate->rate;
+        }
+
         return $restaurant;
     }
 
@@ -179,6 +184,7 @@ class RestaurantController extends Controller
         }
         $recent_rate->rate = request()->rate;
         $restaurant->restaurant_rates()->save($recent_rate);
+
         return $this->calculate_rating($restaurant);
     }
 
