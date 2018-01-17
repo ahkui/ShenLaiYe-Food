@@ -23,7 +23,17 @@ class ExampleTest extends TestCase
 
         $this->get('register')->assertStatus(200);
 
+        $this
+            ->get('password/reset')
+            ->assertStatus(200);
+
+        $this
+            ->get('password/reset/123')
+            ->assertStatus(200);
+
         $password5 = str_random(5);
+        $password = str_random(6);
+
         $this->json('POST', 'register', [
             'name'                  => "$password5",
             'email'                 => "$password5@$password5.com",
@@ -31,7 +41,6 @@ class ExampleTest extends TestCase
             'password_confirmation' => "$password5",
             '_token'                => csrf_token(),
         ])->assertStatus(422);
-        $password = str_random(6);
 
         $this->json('POST', 'register', [
             'name'                  => "$password",
@@ -51,33 +60,28 @@ class ExampleTest extends TestCase
             ->actingAs(User::first())
             ->get('/')
             ->assertStatus(200);
+
         $this
-            ->get('password/reset')
-            ->assertStatus(200);
-        $this
-            ->get('password/reset/123')
-            ->assertStatus(200);
-        $this
-            ->actingAs(User::first())
             ->json('POST', 'search', ['name'=>'小阿姨'])
             ->assertJson(SearchResult::where('keyword', 'like', '小阿姨')->get()->toArray());
+
         $this
-            ->actingAs(User::first())
             ->json('POST', 'search', ['name'=>'小阿姨'])
             ->assertJson(SearchResult::where('keyword', 'like', '小阿姨')->get()->toArray());
+
         $this
-            ->actingAs(User::first())
             ->json('POST', 'search', ['name'=>'小阿姨', 'is_shop'=>'true'])
             ->assertJson(['data'=>SearchResult::where('keyword', 'like', '小阿姨')->get()->toArray()]);
 
         foreach (SearchResult::get() as $value) {
             $value->delete();
         }
+
         foreach (Restaurant::get() as $value) {
             $value->delete();
         }
+
         $this
-            ->actingAs(User::first())
             ->json('POST', 'search/gps', [
                 'longitude'=> 120.646705,
                 'latitude' => 24.178820,
@@ -85,55 +89,55 @@ class ExampleTest extends TestCase
             ->assertJson(SearchResult::get()->toArray());
 
         $res = Restaurant::first();
+        
         $this
-            ->actingAs(User::first())
             ->json('POST', 'review', [
                     'id'=> $res->_id,
                 ])
             ->assertStatus(200);
+
         $this
-            ->actingAs(User::first())
             ->json('POST', 'review', [
                     'id'=> $res->_id,
                 ])
             ->assertStatus(200);
+
         $this
-            ->actingAs(User::first())
             ->json('PUT', 'review', [
                     'id'     => $res->_id,
                     'rate'   => 5,
                     'comment'=> 'qwe123zxcasd',
                 ])
             ->assertStatus(200);
+
         $this
-            ->actingAs(User::first())
             ->json('PUT', 'review', [
                     'id'     => $res->_id,
                     'rate'   => 5,
                     'comment'=> 'qwe123zx2casd',
                 ])
             ->assertStatus(200);
+
         $this
-            ->actingAs(User::first())
             ->json('PUT', 'review', [
                     'id'     => $res->_id,
                     'rate'   => 5,
                     'comment'=> 'qwe123zxc4asd',
                 ])
             ->assertStatus(200);
+
         $this
-            ->actingAs(User::first())
             ->json('POST', 'review', [
                     'id'=> $res->_id,
                 ])
             ->assertStatus(200);
+
         $this
-            ->actingAs(User::first())
             ->json('POST', 'suggest', [])
             ->assertStatus(200)
             ->assertSee(Cache::get('suggest', null));
+
         $this
-            ->actingAs(User::first())
             ->json('POST', 'suggest', [])
             ->assertStatus(200)
             ->assertSee(Cache::get('suggest', null));
