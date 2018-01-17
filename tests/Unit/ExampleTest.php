@@ -67,7 +67,7 @@ class ExampleTest extends TestCase
             ->assertJson(SearchResult::where('keyword', 'like', '小阿姨')->get()->toArray());
         $this
             ->actingAs(User::first())
-            ->json('POST', 'search', ['name'=>'小阿姨','is_shop'=>'true'])
+            ->json('POST', 'search', ['name'=>'小阿姨', 'is_shop'=>'true'])
             ->assertJson(['data'=>SearchResult::where('keyword', 'like', '小阿姨')->get()->toArray()]);
 
         foreach (SearchResult::get() as $value) {
