@@ -5,8 +5,8 @@ namespace Tests\Unit;
 use App\Restaurant;
 use App\SearchResult;
 use App\User;
-use Tests\TestCase;
 use Cache;
+use Tests\TestCase;
 
 class ExampleTest extends TestCase
 {
