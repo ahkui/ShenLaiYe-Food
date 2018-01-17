@@ -1,4 +1,8 @@
-@extends('layouts.app') @section('content')
+@extends('layouts.app') @section('navbar-left')
+<li class="nav-item">
+    <a class="nav-link" href="#" onclick="show_restaurant_detail('{{$suggest_id}}','今日推薦 - ');return false">今日推薦</a>
+</li>
+@endsection @section('content')
 <div class="container-fulid" id="display-area">
     <div class="row no-gutters">
         <div class="col-sm-4 col-xl-3 col-12">
@@ -88,7 +92,7 @@ var generate_maker_and_list = function(response) {
         var lat = item['location']['coordinates'][1];
         var lng = item['location']['coordinates'][0];
         $('#side-panel .list-group').append(
-            '<a href="#" class="list-group-item list-group-item-action flex-column align-items-start" data-id="' + id + '" data-lat="' + lat + '" data-lng="' + lng + '" onclick="show_restaurant_detail(\'' + id + '\',this)"><div class="d-flex w-100 justify-content-between"><h5 class="mb-1">' + name + '</h5><small>' + rating + '/5</small></div><small class="text-muted">' + vicinity + '</small></a>'
+            '<a href="#" class="list-group-item list-group-item-action flex-column align-items-start" data-id="' + id + '" data-lat="' + lat + '" data-lng="' + lng + '" onclick="show_restaurant_detail(\'' + id + '\')"><div class="d-flex w-100 justify-content-between"><h5 class="mb-1">' + name + '</h5><small>' + rating + '/5</small></div><small class="text-muted">' + vicinity + '</small></a>'
         );
         addMarker({ lat: item['location']['coordinates'][1], lng: item['location']['coordinates'][0] })
     }
@@ -167,13 +171,16 @@ function select_address(id, el, lat = false, lng = false) {
     return false;
 }
 
-var show_restaurant_detail = (id, el) => {
+var show_restaurant_detail = (id,addon_title=null) => {
     event.preventDefault();
     if (!is_loading) {
         loading_start();
-        var el = $(el)
         axios.post('{{route("review")}}', { id: id })
-            .then(generate_review)
+            .then((response)=>{
+                if(addon_title)
+                    response.data.name = addon_title + response.data.name;
+                generate_review(response)
+            })
             .catch(loading_error);
     }
     return false;

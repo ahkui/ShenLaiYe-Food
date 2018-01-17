@@ -9,6 +9,8 @@ use App\RestaurantRate;
 use App\SearchResult;
 use App\Service\PlacesApi;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+use Cache;
 
 class RestaurantController extends Controller
 {
@@ -18,11 +20,19 @@ class RestaurantController extends Controller
     {
         $this->middleware('auth');
         $this->googlePlaces = new PlacesApi(env('GOOGLE_PLACE_API_KEY'));
+
     }
 
     public function home()
     {
-        return view('home');
+        if(!Cache::has('suggest')) {
+            $suggest = Restaurant::orderBy('rating','dces')->first();
+            if($suggest)
+                Cache::put('suggest', $suggest->_id, Carbon::tomorrow());
+        }
+        return view('home')->with([
+            'suggest_id'=>Cache::get('suggest',null),
+        ]);
     }
 
     public function search()
@@ -68,6 +78,19 @@ class RestaurantController extends Controller
         return $data;
     }
 
+    public function searchByGps()
+    {
+        $data = new SearchResult();
+        $data->location = [
+            'type'        => 'Point',
+            'coordinates' => [
+                (float) request()->longitude,
+                (float) request()->latitude,
+            ],
+        ];
+        return $this->search_near($data);
+    }
+
     public function search_near($temp = null)
     {
         $search = $temp ? $temp : SearchResult::find(request()->id);
@@ -81,23 +104,27 @@ class RestaurantController extends Controller
         $data = collect();
         if ($response['status'] == 'OK') {
             foreach ($response['results'] as $value) {
-                $data->push(
-                    Restaurant::firstOrCreate([
-                        'place_id'=> $value['place_id'],
-                    ], [
-                        'location'=> [
-                            'type'       => 'Point',
-                            'coordinates'=> [
-                                $value['geometry']['location']['lng'],
-                                $value['geometry']['location']['lat'],
-                            ],
+                $res = Restaurant::firstOrCreate([
+                    'place_id'=> $value['place_id'],
+                ], [
+                    'location'=> [
+                        'type'       => 'Point',
+                        'coordinates'=> [
+                            $value['geometry']['location']['lng'],
+                            $value['geometry']['location']['lat'],
                         ],
-                        'name'    => $value['name'],
-                        'place_id'=> $value['place_id'],
-                        'rating'  => isset($value['rating']) ? $value['rating'] : 0,
-                        'vicinity'=> $value['vicinity'],
-                    ])
-                );
+                    ],
+                    'name'    => $value['name'],
+                    'place_id'=> $value['place_id'],
+                    'vicinity'=> $value['vicinity'],
+                ]);
+                if(!$res->rating && isset($value['rating'])){
+                    $recent_rate = new RestaurantRate();
+                    $recent_rate->rate = $value['rating'];
+                    $res->restaurant_rates()->save($recent_rate);
+                    $this->calculate_rating($res);
+                }
+                $data->push($res);
             }
 
             if (isset($response['next_page_token'])) {
@@ -108,23 +135,8 @@ class RestaurantController extends Controller
 
         $union = $data->union($db);
         $data = $union->unique('place_id');
-        $data = ['data'=>$this->calculate_rating($data->values()), 'center'=>$search->location['coordinates']];
 
-        return $data;
-    }
-
-    public function searchByGps()
-    {
-        $data = new SearchResult();
-        $data->location = [
-            'type'        => 'Point',
-            'coordinates' => [
-                (float) request()->longitude,
-                (float) request()->latitude,
-            ],
-        ];
-
-        return $this->search_near($data);
+        return ['data'=>$data->values()->sortByDesc('rating')->values(), 'center'=>$search->location['coordinates']];
     }
 
     public function geometry_search($location, $distance = 1000)
@@ -142,19 +154,13 @@ class RestaurantController extends Controller
         $restaurant = Restaurant::find(request()->id);
         $restaurant->restaurant_comments->map(function ($item, $key) {
             $item->user;
-
             return $item;
         });
         $restaurant->reviews_count = $restaurant->restaurant_rates->count();
-        $restaurant->rating = round($restaurant->restaurant_rates->avg('rate'), 1);
-        $restaurant->save();
-        // if($restaurant->restaurant_rates)
         $restaurant->user_rate = $restaurant->restaurant_rates->where('user_id', auth()->user()->id)->first();
-        if ($restaurant->user_rate) {
+        if ($restaurant->user_rate) 
             $restaurant->user_rate = $restaurant->user_rate->rate;
-        }
-
-        return $this->calculate_rating($restaurant);
+        return $restaurant;
     }
 
     public function submit_review()
@@ -166,18 +172,14 @@ class RestaurantController extends Controller
             $comment->comment = request()->comment;
             $restaurant->restaurant_comments()->save($comment);
         }
-        $recent_rate = null;
-        if ($restaurant->restaurant_rates) {
-            $recent_rate = $restaurant->restaurant_rates->where('user_id', auth()->user()->id)->first();
-        }
+        $recent_rate = $restaurant->restaurant_rates->where('user_id', auth()->user()->id)->first();
         if (!$recent_rate) {
             $recent_rate = new RestaurantRate();
             $recent_rate->user_id = auth()->user()->id;
         }
         $recent_rate->rate = request()->rate;
         $restaurant->restaurant_rates()->save($recent_rate);
-
-        return $restaurant;
+        return $this->calculate_rating($restaurant);
     }
 
     private function calculate_rating($item)

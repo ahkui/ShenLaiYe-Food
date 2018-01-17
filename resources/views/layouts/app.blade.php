@@ -22,7 +22,9 @@
             <a class="navbar-brand" href="{{route('home')}}">{{config('app.name', 'Laravel')}}</a>
             <div class="collapse navbar-collapse" id="navBar">
                 <ul class="navbar-nav mr-auto mt-2 mt-sm-0">
-                    @auth @endauth
+                    @auth
+                    @yield('navbar-left')
+                    @endauth
                 </ul>
                 <ul class="navbar-nav mt-2 mt-sm-0">
                     @guest
