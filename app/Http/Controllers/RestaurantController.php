@@ -71,21 +71,24 @@ class RestaurantController extends Controller
             // });
             return ['data'=>$data];
         }
+
         return $data;
     }
 
     /**
      * [convert_place_id description]
      * 搜尋資料庫內有無紀錄，無則跟google拿placeDetails
-     * 透過place_id得到資料
-     * @param  [type] $place_id [description]
-     * @param  [type] $name     [description]
-     * @param  [type] $keyword  [description]
-     * @return [type]           [description]
+     * 透過place_id得到資料.
+     *
+     * @param [type] $place_id [description]
+     * @param [type] $name     [description]
+     * @param [type] $keyword  [description]
+     *
+     * @return [type] [description]
      */
     public function convert_place_id($place_id, $name, $keyword = null)
     {
-        $data = SearchResult::where('place_id', '=', $place_id)->first(); 
+        $data = SearchResult::where('place_id', '=', $place_id)->first();
         if ($data) {
             return $data;
         }
@@ -101,12 +104,14 @@ class RestaurantController extends Controller
             'vicinity'=> isset($value['vicinity']) ? $value['vicinity'] : null,
             'keyword' => $keyword,
         ]);
+
         return $data;
     }
 
     /**
      * [searchByGps description]
-     * 如果有GPS則用GPS獲得的座標
+     * 如果有GPS則用GPS獲得的座標.
+     *
      * @return [type] [description]
      */
     public function searchByGps()
@@ -119,13 +124,13 @@ class RestaurantController extends Controller
                 (float) request()->latitude,
             ],
         ];
+
         return $this->search_near($data);
     }
 
-
     /**
-     * 
      * @param  [type]
+     *
      * @return [type]
      */
     public function search_near($temp = null)
