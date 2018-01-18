@@ -109,7 +109,7 @@ var generate_review = function(response) {
         title.html(response.data.name)
         reviews_count.html(response.data.reviews_count)
         reviews_rating.html(response.data.rating)
-        el.find('#rating').barrating('set', response.data.rating)
+        el.find('#rating').barrating('set', parseInt(response.data.rating))
         el.find('#user-rating').barrating('set', response.data.user_rate)
         id.val(response.data._id)
         var comment_area = el.find('#comment_area')

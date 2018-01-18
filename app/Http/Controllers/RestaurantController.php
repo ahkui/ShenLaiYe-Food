@@ -28,7 +28,7 @@ class RestaurantController extends Controller
     }
 
     /**
-     * 搜尋地址、店名keyword，利用google API尋找、資料庫內尋找得到資料後，比對兩者資料，回傳資料。
+     * 搜尋地址keyword，利用google API尋找、資料庫內尋找得到資料後，比對兩者資料，回傳資料。
      *
      * @return [type] [description]
      */
@@ -42,10 +42,33 @@ class RestaurantController extends Controller
                 return $this->convert_place_id($item['place_id'], $item['terms'][0]['value'], $keyword);
             });
             $db = SearchResult::where('keyword', 'like', "%{$keyword}%")->get(); //資料庫資料
-                      $union = $db->union($data); //?
+            $union = $db->union($data);
             $data = $union->unique('place_id')->values();
         }
-        if (request()->is_shop == 'true') { //?
+        if (request()->is_shop == 'true') { //is_shop 店家
+            // $data->map(function($value,$key){
+            //     $res = Restaurant::firstOrCreate([
+            //         'place_id'=> $value['place_id'],
+            //     ], [
+            //         'location'=> [
+            //             'type'       => 'Point',
+            //             'coordinates'=> [
+            //                 $value['geometry']['location']['lng'],
+            //                 $value['geometry']['location']['lat'],
+            //             ],
+            //         ],
+            //         'name'    => $value['name'],
+            //         'place_id'=> $value['place_id'],
+            //         'vicinity'=> $value['vicinity'],
+            //     ]);
+            //     if (!$res->rating && isset($value['rating'])) {
+            //         $recent_rate = new RestaurantRate();
+            //         $recent_rate->rate = $value['rating'];
+            //         $res->restaurant_rates()->save($recent_rate);
+            //         $this->calculate_rating($res);
+            //     }
+            //     return $res;
+            // });
             return ['data'=>$data];
         }
         return $data;
@@ -54,6 +77,7 @@ class RestaurantController extends Controller
     /**
      * [convert_place_id description]
      * 搜尋資料庫內有無紀錄，無則跟google拿placeDetails
+     * 透過place_id得到資料
      * @param  [type] $place_id [description]
      * @param  [type] $name     [description]
      * @param  [type] $keyword  [description]
@@ -61,7 +85,7 @@ class RestaurantController extends Controller
      */
     public function convert_place_id($place_id, $name, $keyword = null)
     {
-        $data = SearchResult::where('place_id', '=', $place_id)->first();
+        $data = SearchResult::where('place_id', '=', $place_id)->first(); 
         if ($data) {
             return $data;
         }
