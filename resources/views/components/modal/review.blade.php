@@ -26,7 +26,7 @@
                 <form onsubmit="return review_submit(this);">
                     <div class="row justify-content-center">
                         <div class="col col-auto">
-                            <h4>评分和评论</h4>
+                            <h4>評分與評論</h4>
                         </div>
                     </div>
                     <div class="row justify-content-center ">

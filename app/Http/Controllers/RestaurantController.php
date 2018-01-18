@@ -27,27 +27,38 @@ class RestaurantController extends Controller
         return view('home');
     }
 
+    /**
+     * 搜尋地址、店名keyword，利用google API尋找、資料庫內尋找得到資料後，比對兩者資料，回傳資料。
+     *
+     * @return [type] [description]
+     */
     public function search()
     {
         $keyword = request()->name;
-        $response = $this->googlePlaces->placeAutocomplete($keyword);
+        $response = $this->googlePlaces->placeAutocomplete($keyword); //google資料
         $data = collect($response['predictions']);
         if ($data->count() > 0) {
             $data = $data->map(function ($item) use ($keyword) {
                 return $this->convert_place_id($item['place_id'], $item['terms'][0]['value'], $keyword);
             });
-            $db = $data;
-            $data = SearchResult::where('keyword', 'like', "%{$keyword}%")->get();
-            $union = $data->union($db);
+            $db = SearchResult::where('keyword', 'like', "%{$keyword}%")->get(); //資料庫資料
+                      $union = $db->union($data); //?
             $data = $union->unique('place_id')->values();
         }
-        if (request()->is_shop == 'true') {
+        if (request()->is_shop == 'true') { //?
             return ['data'=>$data];
         }
-
         return $data;
     }
 
+    /**
+     * [convert_place_id description]
+     * 搜尋資料庫內有無紀錄，無則跟google拿placeDetails
+     * @param  [type] $place_id [description]
+     * @param  [type] $name     [description]
+     * @param  [type] $keyword  [description]
+     * @return [type]           [description]
+     */
     public function convert_place_id($place_id, $name, $keyword = null)
     {
         $data = SearchResult::where('place_id', '=', $place_id)->first();
@@ -66,10 +77,14 @@ class RestaurantController extends Controller
             'vicinity'=> isset($value['vicinity']) ? $value['vicinity'] : null,
             'keyword' => $keyword,
         ]);
-
         return $data;
     }
 
+    /**
+     * [searchByGps description]
+     * 如果有GPS則用GPS獲得的座標
+     * @return [type] [description]
+     */
     public function searchByGps()
     {
         $data = new SearchResult();
@@ -80,10 +95,15 @@ class RestaurantController extends Controller
                 (float) request()->latitude,
             ],
         ];
-
         return $this->search_near($data);
     }
 
+
+    /**
+     * 
+     * @param  [type]
+     * @return [type]
+     */
     public function search_near($temp = null)
     {
         $search = $temp ? $temp : SearchResult::find(request()->id);
@@ -151,7 +171,9 @@ class RestaurantController extends Controller
             return $item;
         });
         $restaurant->reviews_count = $restaurant->restaurant_rates->count();
+
         $restaurant->user_rate = $restaurant->restaurant_rates->where('user_id', auth()->user()->id)->first();
+
         if ($restaurant->user_rate) {
             $restaurant->user_rate = $restaurant->user_rate->rate;
         }
