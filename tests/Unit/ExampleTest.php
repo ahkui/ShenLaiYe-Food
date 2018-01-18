@@ -89,7 +89,7 @@ class ExampleTest extends TestCase
             ->assertJson(SearchResult::get()->toArray());
 
         $res = Restaurant::first();
-        
+
         $this
             ->json('POST', 'review', [
                     'id'=> $res->_id,
