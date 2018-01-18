@@ -26,7 +26,7 @@
                 <div class="list-group"></div>
             </div>
         </div>
-        <div class="col-8 col-xl-9 d-none d-md-block">
+        <div class="col-8 col-xl-9 d-none d-sm-block">
             <div class="content">
                 <div id="map"></div>
             </div>
@@ -82,7 +82,7 @@ var generate_maker_and_list = function(response) {
     if (response.data.center)
         map.panTo({ lat: response.data.center[1], lng: response.data.center[0] });
     $('#side-panel .list-group').html("");
-    clearMarkers();
+    deleteMarkers();
     for (var item in response.data.data) {
         item = response.data.data[item]
         var name = item['name']
