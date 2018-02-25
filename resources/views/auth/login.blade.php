@@ -23,7 +23,8 @@
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary mb-2">Login</button>
-                    <a class="btn btn-link mb-2" href="{{ route('password.request') }}">Forgot Your Password?</a></div>
+                    {{-- <a class="btn btn-link mb-2" href="{{ route('password.request') }}">Forgot Your Password?</a> --}}
+                </div>
             </form>
         </div>
     </div>

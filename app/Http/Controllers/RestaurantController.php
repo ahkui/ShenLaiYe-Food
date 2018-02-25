@@ -46,29 +46,6 @@ class RestaurantController extends Controller
             $data = $union->unique('place_id')->values();
         }
         if (request()->is_shop == 'true') { //is_shop 店家
-            // $data->map(function($value,$key){
-            //     $res = Restaurant::firstOrCreate([
-            //         'place_id'=> $value['place_id'],
-            //     ], [
-            //         'location'=> [
-            //             'type'       => 'Point',
-            //             'coordinates'=> [
-            //                 $value['geometry']['location']['lng'],
-            //                 $value['geometry']['location']['lat'],
-            //             ],
-            //         ],
-            //         'name'    => $value['name'],
-            //         'place_id'=> $value['place_id'],
-            //         'vicinity'=> $value['vicinity'],
-            //     ]);
-            //     if (!$res->rating && isset($value['rating'])) {
-            //         $recent_rate = new RestaurantRate();
-            //         $recent_rate->rate = $value['rating'];
-            //         $res->restaurant_rates()->save($recent_rate);
-            //         $this->calculate_rating($res);
-            //     }
-            //     return $res;
-            // });
             return ['data'=>$data];
         }
         return $data;

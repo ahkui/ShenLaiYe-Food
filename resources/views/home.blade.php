@@ -61,6 +61,7 @@ var loading_error = (error) => {
     loading_stop();
     console.error(error)
 }
+
 var generate_search_result = function(response) {
     loading_stop();
     $('#side-panel .list-group').html("");
@@ -97,6 +98,37 @@ var generate_maker_and_list = function(response) {
         addMarker({ lat: item['location']['coordinates'][1], lng: item['location']['coordinates'][0] })
     }
 };
+
+function search_submit(el) {
+    event.preventDefault();
+    if (!is_loading) {
+        loading_start();
+        var data = $(el).serialize()
+        axios.post('{{route("search")}}', data)
+            .then(function(response) {
+                if (response.data.constructor === Object) {
+                    generate_maker_and_list(response)
+                } else if (response.data.constructor === Array)
+                    generate_search_result(response)
+            })
+            .catch(loading_error);
+    }
+    return false;
+}
+
+function select_address(id, el, lat = false, lng = false) {
+    event.preventDefault();
+    if (!is_loading) {
+        loading_start();
+        var target = $(el)
+        axios.post('{{route("search.near")}}', { id: id, radius: default_radius })
+            .then(generate_maker_and_list)
+            .catch(loading_error);
+    }
+    return false;
+}
+
+
 
 var generate_review = function(response) {
     loading_stop();
@@ -142,35 +174,6 @@ var generate_review = function(response) {
     $('#review-modal').modal()
 };
 
-function search_submit(el) {
-    event.preventDefault();
-    if (!is_loading) {
-        loading_start();
-        var data = $(el).serialize()
-        axios.post('{{route("search")}}', data)
-            .then(function(response) {
-                if (response.data.constructor === Object) {
-                    generate_maker_and_list(response)
-                } else if (response.data.constructor === Array)
-                    generate_search_result(response)
-            })
-            .catch(loading_error);
-    }
-    return false;
-}
-
-function select_address(id, el, lat = false, lng = false) {
-    event.preventDefault();
-    if (!is_loading) {
-        loading_start();
-        var target = $(el)
-        axios.post('{{route("search.near")}}', { id: id, radius: default_radius })
-            .then(generate_maker_and_list)
-            .catch(loading_error);
-    }
-    return false;
-}
-
 var show_restaurant_detail = (id, addon_title = null) => {
     event.preventDefault();
     if (!is_loading) {
@@ -186,20 +189,7 @@ var show_restaurant_detail = (id, addon_title = null) => {
     return false;
 }
 
-var show_restaurant_detail = (id, addon_title = null) => {
-    event.preventDefault();
-    if (!is_loading) {
-        loading_start();
-        axios.post('{{route("review")}}', { id: id })
-            .then((response) => {
-                if (addon_title)
-                    response.data.name = addon_title + response.data.name;
-                generate_review(response)
-            })
-            .catch(loading_error);
-    }
-    return false;
-}
+
 
 var suggest_id = false;
 var show_suggest_restaurant_detail = () => {
